@@ -1,11 +1,13 @@
-import express from "express";
 import bodyParser from "body-parser";
-import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import express from "express";
+import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
+import postRoutes from "./routes/post.js";
+import { verifyToken } from "./middleware/auth.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,6 +21,7 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 // Routes
 app.use("/auth", authRoutes);
+app.use("/posts", verifyToken, postRoutes);
 
 // Set up MongoDB
 const PORT = process.env.PORT || 6001;
