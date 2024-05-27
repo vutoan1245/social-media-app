@@ -1,22 +1,27 @@
+import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
-import LoginPage from "components/LoginPage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
+import NavBar from "components/NavBar";
 import HomePage from "components/HomePage";
 
-const Home = () => {
-  return <div>Home</div>;
-};
 function App() {
   return (
-    <div className="App">
-      <h1> Hello World </h1>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LoginPage />}></Route>
-          <Route path="/home" element={<HomePage />}></Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <Router>
+      <NavBar />
+      <div className="App">
+        <div className="auth-wrapper">
+          <Routes>
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/sign-up" element={<SignUp />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
   );
 }
 
