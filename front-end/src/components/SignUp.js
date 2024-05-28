@@ -1,15 +1,36 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const fetchRes = await fetch(`http://localhost:3001/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ firstName, lastName, email, password }),
+      });
+      const res = await fetchRes.json();
+      console.log(res);
+      if (res) {
+        navigate("/sign-in");
+      }
+    } catch (error) {
+      console.log(`SignUp error`, error);
+    }
+  };
 
   return (
     <div className="auth-inner">
-      <form>
+      <form onSubmit={onSubmit}>
         <h3>Sign Up</h3>
 
         <div className="mb-3">

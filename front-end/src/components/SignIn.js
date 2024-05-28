@@ -1,13 +1,42 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setLogin } from "state/state";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const loginRes = await fetch(`http://localhost:3001/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const loggedIn = await loginRes.json();
+      console.log(loggedIn);
+
+      if (loggedIn) {
+        dispatch(
+          setLogin({
+            user: loggedIn.user,
+            token: loggedIn.token,
+          })
+        );
+        navigate("/home");
+      }
+    } catch (error) {}
+  };
 
   return (
     <div className="auth-inner">
-      <form>
+      <form onSubmit={onSubmit}>
         <h3>Sign In</h3>
 
         <div className="mb-3">
