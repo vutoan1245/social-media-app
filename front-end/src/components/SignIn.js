@@ -35,7 +35,7 @@ const SignIn = () => {
   };
 
   return (
-    <div className="auth-inner">
+    <div className="auth-inner" style={{ marginTop: "6rem" }}>
       <form onSubmit={onSubmit}>
         <h3>Sign In</h3>
 

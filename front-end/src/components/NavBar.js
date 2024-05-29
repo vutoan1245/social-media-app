@@ -1,30 +1,30 @@
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import React from "react";
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "state/state";
 
 const NavBar = () => {
   const isAuth = Boolean(useSelector((state) => state.token));
-  console.log(isAuth);
-
   const dispatch = useDispatch();
 
-  const onSignOut = () => {
+  const handleLogout = () => {
     dispatch(setLogout());
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light fixed-top">
-      <div className="container">
-        <Link className="navbar-brand" to={"/home"}>
-          Social Media App
-        </Link>
-        {isAuth && (
-          <Link className="nav-link" onClick={onSignOut}>
-            Sign out
-          </Link>
-        )}
-      </div>
-    </nav>
+    <Navbar expand="lg" fixed="top" style={{ backgroundColor: "#1c8ef9" }}>
+      <Container>
+        <Navbar.Brand href="#home">
+          <p style={{ color: "white", margin: "auto" }}>SocialApp</p>
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto"></Nav>
+
+          {isAuth && <Button onClick={handleLogout}>Log out</Button>}
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 

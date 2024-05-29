@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 body {
-  background: #1c8ef9 !important;
+  background: #eff1f3 !important;
   min-height: 100vh;
   display: flex;
   font-weight: 400;
@@ -39,7 +39,6 @@ html,
 
 .auth-wrapper {
   display: flex;
-  justify-content: center;
   flex-direction: column;
   text-align: left;
 }

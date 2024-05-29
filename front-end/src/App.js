@@ -8,10 +8,9 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useSelector } from "react-redux";
-import SignIn from "./components/SignIn";
-import SignUp from "./components/SignUp";
-import NavBar from "components/NavBar";
-import HomePage from "components/HomePage";
+import HomePage from "pages/HomePage";
+import SignInPage from "pages/SigninPage";
+import SignUpPage from "pages/SignupPage";
 
 function App() {
   const isAuth = Boolean(useSelector((state) => state.token));
@@ -19,20 +18,19 @@ function App() {
 
   return (
     <Router>
-      <NavBar />
       <div className="App">
         <div className="auth-wrapper">
           <Routes>
             <Route
               path="/"
-              element={isAuth ? <Navigate to="/home" /> : <SignIn />}
+              element={isAuth ? <Navigate to="/home" /> : <SignInPage />}
             />
             <Route
               path="/home"
               element={isAuth ? <HomePage /> : <Navigate to="/" />}
             />
-            <Route path="/sign-in" element={<SignIn />} />
-            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/sign-in" element={<SignInPage />} />
+            <Route path="/sign-up" element={<SignUpPage />} />
           </Routes>
         </div>
       </div>

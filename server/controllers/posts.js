@@ -17,8 +17,9 @@ export const createPost = async (req, res) => {
     });
     await newPost.save();
 
-    const post = await Post.find();
-    res.status(201).json(post);
+    const posts = await Post.find();
+    posts.sort((a, b) => b.createdAt - a.createdAt);
+    res.status(201).json(posts);
   } catch (err) {
     res.status(409).json({ message: err.message });
   }
@@ -28,6 +29,8 @@ export const createPost = async (req, res) => {
 export const getFeedPosts = async (_req, res) => {
   try {
     const posts = await Post.find();
+    posts.sort((a, b) => b.createdAt - a.createdAt);
+
     res.status(200).json(posts);
   } catch (err) {
     res.status(404).json({ message: err.message });
