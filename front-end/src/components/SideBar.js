@@ -5,7 +5,12 @@ const SideBar = () => {
     <Nav
       className="col-md-12 d-none d-md-block sidebar"
       fixed="left"
-      style={{ marginTop: "5rem", backgroundColor: "white" }}
+      style={{
+        marginTop: "5rem",
+        backgroundColor: "white",
+        border: "1px solid #ced4da",
+        borderRadius: "0.25rem",
+      }}
     >
       <div className="sidebar-sticky">
         <Nav.Item>
