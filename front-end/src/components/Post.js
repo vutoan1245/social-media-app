@@ -17,17 +17,24 @@ const Post = ({
       <Card.Body>
         <Row className="align-items-center mb-3">
           <Col xs="auto">
-            <Image src={profilePic} roundedCircle width="50" height="50" />
+            <Image
+              src={profilePic}
+              roundedCircle
+              width="50"
+              height="50"
+              role="button"
+            />
           </Col>
           <Col>
             <h5 className="mb-0">
-              {name} <small className="text-muted">{" - " + timestamp}</small>
+              <span role="button">{name}</span>
+              <small className="text-muted">{" - " + timestamp}</small>
             </h5>
           </Col>
         </Row>
         <Card.Text>{content}</Card.Text>
         <Row className="text-center">
-          <Col onClick={() => onLike(postId)}>
+          <Col onClick={() => onLike(postId)} role="button">
             <i
               className={
                 isLiked ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"
@@ -35,10 +42,10 @@ const Post = ({
             />
             Like {likes}
           </Col>
-          <Col>
+          <Col role="button">
             <i className="bi bi-chat-left-text" /> Comment
           </Col>
-          <Col>
+          <Col role="button">
             <i className="bi bi-share" /> Share
           </Col>
         </Row>
