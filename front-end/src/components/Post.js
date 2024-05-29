@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Row, Col, Image, Button } from "react-bootstrap";
+import { Card, Row, Col, Image } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 const Post = ({
