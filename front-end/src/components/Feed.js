@@ -61,6 +61,7 @@ const Feed = () => {
           likes={Object.keys(post.likes).length}
           isLiked={!!post.likes[user._id]}
           onLike={onLike}
+          picturePath={post.picturePath}
         />
       )),
     [posts, user._id, onLike]

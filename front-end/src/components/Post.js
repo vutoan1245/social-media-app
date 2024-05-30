@@ -2,11 +2,12 @@ import React from "react";
 import { Card, Row, Col, Image } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useNavigate } from "react-router-dom";
+import profileHolder from "Profile-Photo-Place-Holder.png";
 
 const Post = ({
   userId,
   postId,
-  profilePic,
+  picturePath,
   name,
   content,
   timestamp,
@@ -24,34 +25,27 @@ const Post = ({
     onLike(postId);
   };
 
-  const styles = {
-    clickable: {
-      cursor: "pointer",
-    },
-  };
-
   return (
     <Card className="mb-3">
       <Card.Body>
         <Row className="align-items-center mb-3">
           <Col xs="auto">
             <Image
-              src={profilePic}
+              src={
+                picturePath
+                  ? `http://localhost:3001/assets/${picturePath}`
+                  : profileHolder
+              }
               roundedCircle
               width="50"
               height="50"
               role="button"
               onClick={handleProfileClick}
-              style={styles.clickable}
             />
           </Col>
           <Col>
             <h5 className="mb-0">
-              <span
-                role="button"
-                onClick={handleProfileClick}
-                style={styles.clickable}
-              >
+              <span role="button" onClick={handleProfileClick}>
                 {name}
               </span>
               <small className="text-muted">{" - " + timestamp}</small>
@@ -60,7 +54,7 @@ const Post = ({
         </Row>
         <Card.Text>{content}</Card.Text>
         <Row className="text-center">
-          <Col onClick={handleLikeClick} role="button" style={styles.clickable}>
+          <Col onClick={handleLikeClick} role="button">
             <i
               className={
                 isLiked ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"
@@ -68,10 +62,10 @@ const Post = ({
             />{" "}
             Like {likes}
           </Col>
-          <Col role="button" style={styles.clickable}>
+          <Col role="button">
             <i className="bi bi-chat-left-text" /> Comment
           </Col>
-          <Col role="button" style={styles.clickable}>
+          <Col role="button">
             <i className="bi bi-share" /> Share
           </Col>
         </Row>

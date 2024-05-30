@@ -20,6 +20,9 @@ const postSchema = mongoose.Schema(
       min: 2,
       max: 100000,
     },
+    picturePath: {
+      type: String,
+    },
     comments: {
       type: Array,
       default: [],
