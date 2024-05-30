@@ -1,93 +1,132 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  Form,
+  Button,
+  Container,
+  Row,
+  Col,
+  Alert,
+  Spinner,
+} from "react-bootstrap";
+
+const FormField = ({
+  controlId,
+  label,
+  type,
+  placeholder,
+  value,
+  onChange,
+}) => (
+  <Form.Group className="mb-3" controlId={controlId}>
+    <Form.Label>{label}</Form.Label>
+    <Form.Control
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      onChange={onChange}
+    />
+  </Form.Group>
+);
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
+    setError("");
 
     try {
-      const fetchRes = await fetch(`http://localhost:3001/auth/register`, {
+      const res = await fetch(`http://localhost:3001/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ firstName, lastName, email, password }),
       });
-      const res = await fetchRes.json();
-      console.log(res);
-      if (res) {
+
+      if (!res.ok) {
+        throw new Error("Failed to register");
+      }
+
+      const data = await res.json();
+      if (data) {
         navigate("/sign-in");
       }
     } catch (error) {
-      console.log(`SignUp error`, error);
+      setError("Registration failed. Please try again.");
+      console.error("SignUp error", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="auth-inner" style={{ marginTop: "6rem" }}>
-      <form onSubmit={onSubmit}>
-        <h3>Sign Up</h3>
+    <Container
+      className="auth-inner"
+      style={{ maxWidth: "400px", marginTop: "6rem" }}
+    >
+      <Row className="justify-content-md-center">
+        <Col>
+          <Form onSubmit={onSubmit}>
+            <h3>Sign Up</h3>
 
-        <div className="mb-3">
-          <label>First name</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="First name"
-            value={firstName}
-            onChange={(event) => setFirstName(event.target.value)}
-          />
-        </div>
+            {error && <Alert variant="danger">{error}</Alert>}
 
-        <div className="mb-3">
-          <label>Last name</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Last name"
-            value={lastName}
-            onChange={(event) => setLastName(event.target.value)}
-          />
-        </div>
+            <FormField
+              controlId="formFirstName"
+              label="First name"
+              type="text"
+              placeholder="First name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
 
-        <div className="mb-3">
-          <label>Email address</label>
-          <input
-            type="email"
-            className="form-control"
-            placeholder="Enter email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-        </div>
+            <FormField
+              controlId="formLastName"
+              label="Last name"
+              type="text"
+              placeholder="Last name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
 
-        <div className="mb-3">
-          <label>Password</label>
-          <input
-            type="password"
-            className="form-control"
-            placeholder="Enter password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </div>
+            <FormField
+              controlId="formEmail"
+              label="Email address"
+              type="email"
+              placeholder="Enter email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-        <div className="d-grid">
-          <button type="submit" className="btn btn-primary">
-            Sign Up
-          </button>
-        </div>
+            <FormField
+              controlId="formPassword"
+              label="Password"
+              type="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-        <p className="forgot-password text-right">
-          Already registered <Link to="/sign-in">Sign in?</Link>
-        </p>
-      </form>
-    </div>
+            <div className="d-grid mb-3">
+              <Button variant="primary" type="submit" disabled={loading}>
+                {loading ? <Spinner animation="border" size="sm" /> : "Sign Up"}
+              </Button>
+            </div>
+
+            <p className="forgot-password text-right">
+              Already registered <Link to="/sign-in">Sign in?</Link>
+            </p>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
