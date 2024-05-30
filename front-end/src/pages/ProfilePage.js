@@ -42,7 +42,7 @@ const ProfilePage = () => {
     if (token && userId) {
       fetchPosts();
     }
-  }, [token, userId, dispatch]);
+  });
 
   const styles = {
     contentCol: {
@@ -55,7 +55,7 @@ const ProfilePage = () => {
       <NavBar />
       <Container fluid>
         <Row>
-          <Col md={3}>
+          <Col md={3} style={{ paddingRight: "0" }}>
             <SideBar />
           </Col>
           <Col md={9} style={styles.contentCol}>

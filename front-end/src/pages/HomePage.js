@@ -36,13 +36,7 @@ const HomePage = () => {
     if (token) {
       fetchPosts();
     }
-  }, [token, dispatch]);
-
-  const styles = {
-    contentCol: {
-      marginTop: "5rem",
-    },
-  };
+  });
 
   return (
     <>
@@ -52,7 +46,7 @@ const HomePage = () => {
           <Col md={3}>
             <SideBar />
           </Col>
-          <Col md={9} style={styles.contentCol}>
+          <Col md={9} style={{ marginTop: "5rem" }}>
             {loading ? (
               <div style={{ textAlign: "center", marginTop: "2rem" }}>
                 <Spinner animation="border" />
