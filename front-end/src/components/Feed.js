@@ -1,33 +1,12 @@
+import React, { useMemo, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state/state";
 import Post from "./Post";
-import { useDispatch, useSelector } from "react-redux";
+import { formatDistanceToNow } from "date-fns";
 
-const calculateTimeDifference = (startTimestamp, endTimestamp) => {
-  const timeDifference = startTimestamp - endTimestamp;
-
-  // Define time units and their conversion factors in milliseconds
-  const timeUnits = [
-    { unit: "days", milliseconds: 86400000 },
-    { unit: "hours", milliseconds: 3600000 },
-    { unit: "minutes", milliseconds: 60000 },
-    { unit: "seconds", milliseconds: 1000 },
-  ];
-
-  // Find the biggest time unit for rounding
-  let biggestUnit = timeUnits[timeUnits.length - 1];
-  for (let i = 0; i < timeUnits.length; i++) {
-    if (timeDifference >= timeUnits[i].milliseconds) {
-      biggestUnit = timeUnits[i];
-      break;
-    }
-  }
-
-  // Calculate rounded time difference
-  const roundedDifference = Math.ceil(
-    timeDifference / biggestUnit.milliseconds
-  );
-
-  return roundedDifference + " " + biggestUnit.unit + " ago";
+// Utility function for time difference calculation
+const calculateTimeDifference = (timestamp) => {
+  return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
 };
 
 const Feed = () => {
@@ -36,48 +15,58 @@ const Feed = () => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  const onLike = async (postId) => {
-    try {
-      const fetchRes = await fetch(
-        `http://localhost:3001/posts/${postId}/like`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
-          },
+  const onLike = useCallback(
+    async (postId) => {
+      try {
+        const fetchRes = await fetch(
+          `http://localhost:3001/posts/${postId}/like`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!fetchRes.ok) {
+          throw new Error("Failed to like the post");
         }
-      );
 
-      const res = await fetchRes.json();
+        const res = await fetchRes.json();
 
-      const newPosts = posts.map((post) => (post._id === res._id ? res : post));
+        const newPosts = posts.map((post) =>
+          post._id === res._id ? res : post
+        );
 
-      dispatch(setPosts({ posts: newPosts }));
-    } catch (error) {}
-  };
+        dispatch(setPosts({ posts: newPosts }));
+      } catch (error) {
+        console.error("Error liking post:", error);
+      }
+    },
+    [posts, token, dispatch]
+  );
 
-  return (
-    <div>
-      {posts.map((post) => (
+  const renderedPosts = useMemo(
+    () =>
+      posts.map((post) => (
         <Post
           key={post._id}
           userId={post.userId}
           postId={post._id}
           profilePic={"https://via.placeholder.com/50"}
-          name={post.firstName + " " + post.lastName}
+          name={`${post.firstName} ${post.lastName}`}
           content={post.content}
-          timestamp={calculateTimeDifference(
-            new Date(),
-            new Date(post.createdAt)
-          )}
+          timestamp={calculateTimeDifference(post.createdAt)}
           likes={Object.keys(post.likes).length}
-          isLiked={post.likes[user._id]}
+          isLiked={!!post.likes[user._id]}
           onLike={onLike}
         />
-      ))}
-    </div>
+      )),
+    [posts, user._id, onLike]
   );
+
+  return <div>{renderedPosts}</div>;
 };
 
 export default Feed;
