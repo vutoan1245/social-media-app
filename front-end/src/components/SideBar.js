@@ -6,16 +6,20 @@ const SideBar = () => {
   const userId = useSelector((state) => state.user._id);
   const navigate = useNavigate();
 
+  const styles = {
+    sidebar: {
+      marginTop: "5rem",
+      backgroundColor: "white",
+      border: "1px solid #ced4da",
+      borderRadius: "0.25rem",
+    },
+  };
+
   return (
     <Nav
       className="col-md-12 d-none d-md-block sidebar"
       fixed="left"
-      style={{
-        marginTop: "5rem",
-        backgroundColor: "white",
-        border: "1px solid #ced4da",
-        borderRadius: "0.25rem",
-      }}
+      style={styles.sidebar}
     >
       <div className="sidebar-sticky">
         <Nav.Item>

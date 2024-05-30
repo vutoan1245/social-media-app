@@ -14,7 +14,22 @@ const Post = ({
   isLiked,
   onLike,
 }) => {
-  const navigage = useNavigate();
+  const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    navigate(`/profile/${userId}`);
+  };
+
+  const handleLikeClick = () => {
+    onLike(postId);
+  };
+
+  const styles = {
+    clickable: {
+      cursor: "pointer",
+    },
+  };
+
   return (
     <Card className="mb-3">
       <Card.Body>
@@ -26,14 +41,16 @@ const Post = ({
               width="50"
               height="50"
               role="button"
-              onClick={() => navigage(`/profile/${userId}`)}
+              onClick={handleProfileClick}
+              style={styles.clickable}
             />
           </Col>
           <Col>
             <h5 className="mb-0">
               <span
                 role="button"
-                onClick={() => navigage(`/profile/${userId}`)}
+                onClick={handleProfileClick}
+                style={styles.clickable}
               >
                 {name}
               </span>
@@ -43,18 +60,18 @@ const Post = ({
         </Row>
         <Card.Text>{content}</Card.Text>
         <Row className="text-center">
-          <Col onClick={() => onLike(postId)} role="button">
+          <Col onClick={handleLikeClick} role="button" style={styles.clickable}>
             <i
               className={
                 isLiked ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"
               }
-            />
+            />{" "}
             Like {likes}
           </Col>
-          <Col role="button">
+          <Col role="button" style={styles.clickable}>
             <i className="bi bi-chat-left-text" /> Comment
           </Col>
-          <Col role="button">
+          <Col role="button" style={styles.clickable}>
             <i className="bi bi-share" /> Share
           </Col>
         </Row>
