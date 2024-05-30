@@ -29,11 +29,19 @@ const FormField = ({
   </Form.Group>
 );
 
+const FileField = ({ controlId, label, onChange }) => (
+  <Form.Group className="mb-3" controlId={controlId}>
+    <Form.Label>{label}</Form.Label>
+    <Form.Control type="file" onChange={onChange} />
+  </Form.Group>
+);
+
 const Register = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [image, setImage] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -43,11 +51,20 @@ const Register = () => {
     setLoading(true);
     setError("");
 
+    const formData = new FormData();
+    formData.append("firstName", firstName);
+    formData.append("lastName", lastName);
+    formData.append("email", email);
+    formData.append("password", password);
+    if (image) {
+      formData.append("picture", image);
+      formData.append("picturePath", image.name);
+    }
+
     try {
       const res = await fetch(`http://localhost:3001/auth/register`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ firstName, lastName, email, password }),
+        body: formData,
       });
 
       if (!res.ok) {
@@ -112,6 +129,12 @@ const Register = () => {
               placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <FileField
+              controlId="formImage"
+              label="Profile Image"
+              onChange={(e) => setImage(e.target.files[0])}
             />
 
             <div className="d-grid mb-3">

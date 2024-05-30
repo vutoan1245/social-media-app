@@ -93,10 +93,6 @@ const SignIn = () => {
             <EmailField email={email} setEmail={setEmail} />
             <PasswordField password={password} setPassword={setPassword} />
 
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Remember me" />
-            </Form.Group>
-
             <div className="d-grid mb-3">
               <Button variant="primary" type="submit" disabled={loading}>
                 {loading ? <Spinner animation="border" size="sm" /> : "Submit"}
