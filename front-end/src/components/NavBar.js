@@ -1,11 +1,13 @@
 import React from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { setLogout } from "state/state";
 
 const NavBar = () => {
   const isAuth = Boolean(useSelector((state) => state.token));
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(setLogout());
@@ -14,7 +16,7 @@ const NavBar = () => {
   return (
     <Navbar expand="lg" fixed="top" style={{ backgroundColor: "#1c8ef9" }}>
       <Container>
-        <Navbar.Brand href="#home">
+        <Navbar.Brand onClick={() => navigate("/home")}>
           <p style={{ color: "white", margin: "auto" }}>SocialApp</p>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

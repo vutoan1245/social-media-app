@@ -14,19 +14,18 @@ const SignIn = () => {
     event.preventDefault();
 
     try {
-      const loginRes = await fetch(`http://localhost:3001/auth/login`, {
+      const res = await fetch(`http://localhost:3001/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const loggedIn = await loginRes.json();
-      console.log(loggedIn);
+      const loggedInRes = await res.json();
 
-      if (loggedIn) {
+      if (loggedInRes) {
         dispatch(
           setLogin({
-            user: loggedIn.user,
-            token: loggedIn.token,
+            user: loggedInRes.user,
+            token: loggedInRes.token,
           })
         );
         navigate("/home");

@@ -1,11 +1,9 @@
 import { setPosts } from "state/state";
 import Post from "./Post";
-import PostInput from "./PostInput";
 import { useDispatch, useSelector } from "react-redux";
 
 const calculateTimeDifference = (startTimestamp, endTimestamp) => {
   const timeDifference = startTimestamp - endTimestamp;
-  console.log(timeDifference);
 
   // Define time units and their conversion factors in milliseconds
   const timeUnits = [
@@ -60,11 +58,11 @@ const Feed = () => {
   };
 
   return (
-    <div style={{ marginTop: "5rem" }}>
-      <PostInput />
+    <div>
       {posts.map((post) => (
         <Post
           key={post._id}
+          userId={post.userId}
           postId={post._id}
           profilePic={"https://via.placeholder.com/50"}
           name={post.firstName + " " + post.lastName}

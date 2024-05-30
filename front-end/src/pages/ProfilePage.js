@@ -3,23 +3,29 @@ import { Container, Row, Col } from "react-bootstrap";
 import NavBar from "../components/NavBar";
 import SideBar from "../components/SideBar";
 import Feed from "../components/Feed";
+import PostInput from "components/PostInput";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state/state";
-import PostInput from "components/PostInput";
+import { useParams } from "react-router-dom";
 
-const HomePage = () => {
+const ProfilePage = () => {
   const token = useSelector((state) => state.token);
   const dispatch = useDispatch();
+  const myUserId = useSelector((state) => state.user._id);
+  const { userId } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3001/posts", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
-          },
-        });
+        const response = await fetch(
+          `http://localhost:3001/posts/${userId}/posts`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
+            },
+          }
+        );
         const posts = await response.json();
 
         if (posts) dispatch(setPosts({ posts }));
@@ -40,7 +46,7 @@ const HomePage = () => {
             <SideBar />
           </Col>
           <Col md={9} style={{ marginTop: "5rem" }}>
-            <PostInput />
+            {myUserId === userId && <PostInput />}
             <Feed />
           </Col>
         </Row>
@@ -49,4 +55,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default ProfilePage;

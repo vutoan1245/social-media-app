@@ -25,6 +25,18 @@ export const createPost = async (req, res) => {
   }
 };
 
+// get posts from a user
+export const getUserPosts = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const posts = await Post.find({ userId });
+    posts.sort((a, b) => b.createdAt - a.createdAt);
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
 // Get all posts
 export const getFeedPosts = async (_req, res) => {
   try {

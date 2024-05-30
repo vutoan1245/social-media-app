@@ -1,8 +1,10 @@
 import React from "react";
 import { Card, Row, Col, Image } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { useNavigate } from "react-router-dom";
 
 const Post = ({
+  userId,
   postId,
   profilePic,
   name,
@@ -12,6 +14,7 @@ const Post = ({
   isLiked,
   onLike,
 }) => {
+  const navigage = useNavigate();
   return (
     <Card className="mb-3">
       <Card.Body>
@@ -23,11 +26,17 @@ const Post = ({
               width="50"
               height="50"
               role="button"
+              onClick={() => navigage(`/profile/${userId}`)}
             />
           </Col>
           <Col>
             <h5 className="mb-0">
-              <span role="button">{name}</span>
+              <span
+                role="button"
+                onClick={() => navigage(`/profile/${userId}`)}
+              >
+                {name}
+              </span>
               <small className="text-muted">{" - " + timestamp}</small>
             </h5>
           </Col>
