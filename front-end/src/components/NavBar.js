@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { setLogout } from "state/state";
 
 const NavBar = () => {
-  const isAuth = Boolean(useSelector((state) => state.token));
+  const isAuth = useSelector((state) => Boolean(state.token));
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -13,16 +13,25 @@ const NavBar = () => {
     dispatch(setLogout());
   };
 
+  const styles = {
+    navbar: {
+      backgroundColor: "#1c8ef9",
+    },
+    brand: {
+      color: "white",
+      cursor: "pointer",
+    },
+  };
+
   return (
-    <Navbar expand="lg" fixed="top" style={{ backgroundColor: "#1c8ef9" }}>
+    <Navbar expand="lg" fixed="top" style={styles.navbar}>
       <Container>
-        <Navbar.Brand onClick={() => navigate("/home")}>
-          <p style={{ color: "white", margin: "auto" }}>SocialApp</p>
+        <Navbar.Brand onClick={() => navigate("/home")} style={styles.brand}>
+          SocialApp
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto"></Nav>
-
+          <Nav className="me-auto" />
           {isAuth && <Button onClick={handleLogout}>Log out</Button>}
         </Navbar.Collapse>
       </Container>
