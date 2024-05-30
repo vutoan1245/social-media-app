@@ -10,7 +10,7 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/post.js";
-import { verifyToken } from "./middleware/auth.js";
+import { verifyToken } from "./middleware/authMiddleware.js";
 
 // Setup
 const __filename = fileURLToPath(import.meta.url);
