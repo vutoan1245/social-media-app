@@ -19,7 +19,7 @@ const upload = multer({
   fileFilter: (_req, file, cb) => {
     checkFileType(file, cb);
   },
-}).single("picture"); // 'myFile' is the name of the form field
+}).single("picture");
 
 // Check file type
 function checkFileType(file, cb) {
@@ -41,14 +41,9 @@ function checkFileType(file, cb) {
 const uploadSingle = (req, res, next) => {
   upload(req, res, (err) => {
     if (err) {
-      res.status(400).json({ success: false, message: err });
-    } else {
-      if (req.file == undefined) {
-        res.status(400).json({ success: false, message: "No file selected!" });
-      } else {
-        next();
-      }
+      return res.status(400).json({ success: false, message: err });
     }
+    next();
   });
 };
 

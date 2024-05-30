@@ -58,7 +58,6 @@ const Register = () => {
     formData.append("password", password);
     if (image) {
       formData.append("picture", image);
-      formData.append("picturePath", image.name);
     }
 
     try {

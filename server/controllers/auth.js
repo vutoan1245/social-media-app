@@ -6,7 +6,7 @@ import User from "../models/User.js";
 export const register = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
-    const picturePath = req.file.filename;
+    const picturePath = req.file ? req.file.filename : null;
     if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ message: "All fields are required." });
     }
