@@ -14,6 +14,7 @@ const Post = ({
   likes,
   isLiked,
   onLike,
+  images = [], // Default to an empty array if images are not provided
 }) => {
   const navigate = useNavigate();
 
@@ -53,7 +54,22 @@ const Post = ({
           </Col>
         </Row>
         <Card.Text>{content}</Card.Text>
-        <Row className="text-center">
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          {images.map((image, index) => (
+            <Image
+              key={index}
+              src={`http://localhost:3001/assets/${image}`}
+              thumbnail
+              style={{
+                maxWidth: "150px",
+                maxHeight: "150px",
+                objectFit: "cover",
+                margin: "2px",
+              }}
+            />
+          ))}
+        </div>
+        <Row className="text-center mt-3">
           <Col onClick={handleLikeClick} role="button">
             <i
               className={

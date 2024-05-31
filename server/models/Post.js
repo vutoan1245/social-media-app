@@ -20,6 +20,11 @@ const postSchema = mongoose.Schema(
       min: 2,
       max: 100000,
     },
+    images: [
+      {
+        type: String,
+      },
+    ],
     picturePath: {
       type: String,
     },

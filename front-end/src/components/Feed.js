@@ -57,6 +57,7 @@ const Feed = () => {
           profilePic={"https://via.placeholder.com/50"}
           name={`${post.firstName} ${post.lastName}`}
           content={post.content}
+          images={post.images}
           timestamp={calculateTimeDifference(post.createdAt)}
           likes={Object.keys(post.likes).length}
           isLiked={!!post.likes[user._id]}

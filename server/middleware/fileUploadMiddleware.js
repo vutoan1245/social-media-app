@@ -47,4 +47,22 @@ const uploadSingle = (req, res, next) => {
   });
 };
 
-export { uploadSingle };
+const uploadMany = multer({
+  storage: storage,
+  limits: { fileSize: 10000000 }, // Limit file size to 10MB
+  fileFilter: (_req, file, cb) => {
+    checkFileType(file, cb);
+  },
+}).array("pictures", 10); // Adjust the field name and the max number of files
+
+// // Middleware function
+const uploadMultiple = (req, res, next) => {
+  uploadMany(req, res, (err) => {
+    if (err) {
+      return res.status(400).json({ success: false, message: err });
+    }
+    next();
+  });
+};
+
+export { uploadSingle, uploadMultiple };

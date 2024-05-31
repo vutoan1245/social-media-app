@@ -5,11 +5,12 @@ import {
   likePost,
   getUserPosts,
 } from "../controllers/posts.js";
+import { uploadMultiple } from "../middleware/fileUploadMiddleware.js";
 
 const router = express.Router();
 
 // Create a post
-router.post("/", createPost);
+router.post("/", uploadMultiple, createPost);
 
 // Get posts of a user
 router.get("/:userId/posts", getUserPosts);
