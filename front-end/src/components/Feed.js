@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state/state";
 import Post from "./Post";
@@ -10,10 +10,12 @@ const calculateTimeDifference = (timestamp) => {
 };
 
 const Feed = () => {
-  const posts = useSelector((state) => state.posts);
-  const token = useSelector((state) => state.token);
-  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const { posts, token, user } = useSelector((state) => ({
+    posts: state.posts,
+    token: state.token,
+    user: state.user,
+  }));
 
   const onLike = useCallback(
     async (postId) => {
@@ -47,9 +49,9 @@ const Feed = () => {
     [posts, token, dispatch]
   );
 
-  const renderedPosts = useMemo(
-    () =>
-      posts.map((post) => (
+  return (
+    <>
+      {posts.map((post) => (
         <Post
           key={post._id}
           userId={post.userId}
@@ -64,11 +66,9 @@ const Feed = () => {
           onLike={onLike}
           picturePath={post.picturePath}
         />
-      )),
-    [posts, user._id, onLike]
+      ))}
+    </>
   );
-
-  return <div>{renderedPosts}</div>;
 };
 
 export default Feed;
