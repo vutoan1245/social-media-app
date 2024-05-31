@@ -36,7 +36,7 @@ const HomePage = () => {
     if (token) {
       fetchPosts();
     }
-  });
+  }, [token, dispatch]);
 
   return (
     <>
