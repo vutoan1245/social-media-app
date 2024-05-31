@@ -43,7 +43,7 @@ const HomePage = () => {
       <NavBar />
       <Container fluid>
         <Row>
-          <Col md={3}>
+          <Col md={3} style={{ paddingRight: "0" }}>
             <SideBar />
           </Col>
           <Col md={9} style={{ marginTop: "5rem" }}>
