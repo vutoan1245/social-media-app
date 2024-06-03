@@ -57,14 +57,14 @@ const Feed = () => {
           userId={post.userId}
           postId={post._id}
           profilePic={"https://via.placeholder.com/50"}
-          name={`${post.firstName} ${post.lastName}`}
+          name={`${post.userId.firstName} ${post.userId.lastName}`}
           content={post.content}
           images={post.images}
           timestamp={calculateTimeDifference(post.createdAt)}
           likes={Object.keys(post.likes).length}
           isLiked={!!post.likes[user._id]}
           onLike={onLike}
-          picturePath={post.picturePath}
+          picturePath={post.userId.picturePath}
         />
       ))}
     </>

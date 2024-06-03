@@ -8,12 +8,9 @@ export const createPost = async (req, res) => {
     const images = req.files.map((file) => file.filename);
 
     const userId = req.user.id;
-    const user = await User.findById(userId);
+
     const newPost = new Post({
       userId,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      picturePath: user.picturePath,
       content,
       images,
       comments: [],
@@ -21,7 +18,10 @@ export const createPost = async (req, res) => {
     });
     await newPost.save();
 
-    const posts = await Post.find();
+    const posts = await Post.find().populate(
+      "userId",
+      "firstName lastName picturePath"
+    );
     posts.sort((a, b) => b.createdAt - a.createdAt);
     res.status(201).json(posts);
   } catch (err) {
@@ -29,11 +29,14 @@ export const createPost = async (req, res) => {
   }
 };
 
-// get posts from a user
+// Get posts from a user
 export const getUserPosts = async (req, res) => {
   try {
     const { userId } = req.params;
-    const posts = await Post.find({ userId });
+    const posts = await Post.find({ userId }).populate(
+      "userId",
+      "firstName lastName picturePath"
+    );
     posts.sort((a, b) => b.createdAt - a.createdAt);
     res.status(200).json(posts);
   } catch (err) {
@@ -44,9 +47,11 @@ export const getUserPosts = async (req, res) => {
 // Get all posts
 export const getFeedPosts = async (_req, res) => {
   try {
-    const posts = await Post.find();
+    const posts = await Post.find().populate(
+      "userId",
+      "firstName lastName picturePath"
+    );
     posts.sort((a, b) => b.createdAt - a.createdAt);
-
     res.status(200).json(posts);
   } catch (err) {
     res.status(404).json({ message: err.message });
@@ -71,7 +76,7 @@ export const likePost = async (req, res) => {
       id,
       { likes: post.likes },
       { new: true }
-    );
+    ).populate("userId", "firstName lastName picturePath");
 
     res.status(200).json(updatedPost);
   } catch (err) {

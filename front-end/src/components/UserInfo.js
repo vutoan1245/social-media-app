@@ -35,7 +35,7 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
       }
 
       const response = await fetch(
-        `http://localhost:3001/user/${userInfo._id}`,
+        `http://localhost:3001/user/${userInfo.id}`,
         {
           method: "PUT",
           headers: {

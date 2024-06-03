@@ -20,7 +20,13 @@ export const getUserInfo = async (req, res) => {
 /* EDIT USER INFO */
 export const editUserInfo = async (req, res) => {
   try {
-    const userId = req.params.id; // Get user ID from the request parameters
+    const userId = req.user.id;
+    const requestedUserId = req.params.id; // Get user ID from the request parameters
+
+    if (userId !== requestedUserId) {
+      return res.status(403).json({ message: "Access Denied" });
+    }
+
     const { firstName, lastName, bio } = req.body;
     const picturePath = req.file ? req.file.filename : undefined;
 

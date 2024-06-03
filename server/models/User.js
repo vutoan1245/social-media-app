@@ -1,25 +1,29 @@
 import mongoose from "mongoose";
 
-const UserScheme = new mongoose.Schema(
+const UserSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      require: true,
-      min: 2,
-      max: 100,
+      required: true,
+      minlength: 2,
+      maxlength: 100,
     },
     lastName: {
       type: String,
-      require: true,
-      min: 2,
-      max: 100,
+      required: true,
+      minlength: 2,
+      maxlength: 100,
     },
     email: {
       type: String,
-      require: true,
+      required: true,
       unique: true,
-      min: 2,
-      max: 100,
+      minlength: 2,
+      maxlength: 100,
+      match: [
+        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+        "Please fill a valid email address",
+      ],
     },
     picturePath: {
       type: String,
@@ -27,13 +31,29 @@ const UserScheme = new mongoose.Schema(
     },
     password: {
       type: String,
-      require: true,
-      min: 6,
+      required: true,
+      minlength: 6,
+    },
+    bio: {
+      type: String,
+      maxlength: 500,
+      default: "",
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    versionKey: false,
+    toJSON: {
+      virtuals: true,
+      transform: (doc, ret) => {
+        delete ret._id;
+        delete ret.password;
+        return ret;
+      },
+    },
+  }
 );
 
-const User = mongoose.model("User", UserScheme);
+const User = mongoose.model("User", UserSchema);
 
 export default User;
