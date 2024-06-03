@@ -54,7 +54,7 @@ const Feed = () => {
       {posts.map((post) => (
         <Post
           key={post._id}
-          userId={post.userId}
+          userId={post.userId.id}
           postId={post._id}
           profilePic={"https://via.placeholder.com/50"}
           name={`${post.userId.firstName} ${post.userId.lastName}`}
