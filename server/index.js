@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/post.js";
+import userRoutes from "./routes/userRoutes.js"; // Import the user routes
 import { verifyToken } from "./middleware/authMiddleware.js";
 
 // Setup
@@ -41,6 +42,7 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 // Routes
 app.use("/auth", authRoutes);
 app.use("/posts", verifyToken, postRoutes);
+app.use("/user", userRoutes); // Add the user routes with verifyToken middleware
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {

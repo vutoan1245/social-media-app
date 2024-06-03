@@ -3,23 +3,25 @@ import { Container, Row, Col, Spinner } from "react-bootstrap";
 import NavBar from "../components/NavBar";
 import SideBar from "../components/SideBar";
 import Feed from "../components/Feed";
-import PostInput from "components/PostInput";
+import PostInput from "../components/PostInput";
+import UserInfo from "../components/UserInfo";
 import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "state/state";
+import { setPosts } from "../state/state";
 import { useParams } from "react-router-dom";
 
 const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
+  const [userInfo, setUserInfo] = useState(null);
   const token = useSelector((state) => state.token);
   const myUserId = useSelector((state) => state.user._id);
   const { userId } = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchUserData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3001/posts/${userId}/posts`,
+        const userResponse = await fetch(
+          `http://localhost:3001/user/${userId}`,
           {
             method: "GET",
             headers: {
@@ -27,7 +29,22 @@ const ProfilePage = () => {
             },
           }
         );
-        const posts = await response.json();
+        const userData = await userResponse.json();
+
+        if (userData) {
+          setUserInfo(userData);
+        }
+
+        const postsResponse = await fetch(
+          `http://localhost:3001/posts/${userId}/posts`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const posts = await postsResponse.json();
 
         if (posts) {
           dispatch(setPosts({ posts }));
@@ -40,9 +57,9 @@ const ProfilePage = () => {
     };
 
     if (token && userId) {
-      fetchPosts();
+      fetchUserData();
     }
-  });
+  }, [token, userId, dispatch]);
 
   const styles = {
     contentCol: {
@@ -65,6 +82,9 @@ const ProfilePage = () => {
               </div>
             ) : (
               <>
+                {userInfo && (
+                  <UserInfo userInfo={userInfo} setUserInfo={setUserInfo} />
+                )}
                 {myUserId === userId && <PostInput />}
                 <Feed />
               </>

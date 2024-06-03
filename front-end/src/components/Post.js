@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Row, Col, Image } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useNavigate } from "react-router-dom";
-import profileHolder from "Profile-Photo-Place-Holder.png";
+import profileHolder from "../assets/Profile-Photo-Place-Holder.png";
 
 const Post = ({
   userId,
