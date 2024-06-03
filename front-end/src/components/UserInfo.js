@@ -1,15 +1,18 @@
 import React, { useState, useRef } from "react";
-import { Card, Row, Col, Image, Button, Form } from "react-bootstrap";
+import { Card, Row, Col, Image, Button, Form, Spinner } from "react-bootstrap";
 import profileHolder from "../assets/Profile-Photo-Place-Holder.png";
 import { useSelector } from "react-redux";
 
 const UserInfo = ({ userInfo, setUserInfo }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Loading state
   const [formData, setFormData] = useState({
     firstName: userInfo.firstName,
     lastName: userInfo.lastName,
     bio: userInfo.bio,
-    picturePath: "http://localhost:3001/assets/" + userInfo.picturePath,
+    picturePath: userInfo.picturePath
+      ? `http://localhost:3001/assets/${userInfo.picturePath}`
+      : profileHolder,
     pictureFile: null, // New state to hold the file object
   });
   const token = useSelector((state) => state.token);
@@ -25,6 +28,7 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
   };
 
   const handleSaveClick = async () => {
+    setIsLoading(true); // Start loading
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("firstName", formData.firstName);
@@ -50,6 +54,9 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
         setUserInfo(updatedUser); // Update the user info in the parent component
         setFormData({
           ...updatedUser,
+          picturePath: updatedUser.picturePath
+            ? `http://localhost:3001/assets/${updatedUser.picturePath}`
+            : profileHolder,
           pictureFile: null, // Reset the pictureFile after save
         });
         setIsEditing(false);
@@ -58,6 +65,8 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
       }
     } catch (error) {
       console.error("Error saving data:", error);
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -90,6 +99,7 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
         size="sm"
         style={{ position: "absolute", top: "10px", right: "10px" }}
         onClick={handleEditClick}
+        disabled={isLoading} // Disable button while loading
       >
         {isEditing ? "Cancel" : "Edit"}
       </Button>
@@ -123,6 +133,7 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleInputChange}
+                  disabled={isLoading} // Disable input while loading
                 />
               </Form.Group>
               <Form.Group>
@@ -132,6 +143,7 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
+                  disabled={isLoading} // Disable input while loading
                 />
               </Form.Group>
               <Form.Group>
@@ -141,10 +153,15 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
                   name="bio"
                   value={formData.bio}
                   onChange={handleInputChange}
+                  disabled={isLoading} // Disable input while loading
                 />
               </Form.Group>
-              <Button variant="success" onClick={handleSaveClick}>
-                Save
+              <Button
+                variant="success"
+                onClick={handleSaveClick}
+                disabled={isLoading}
+              >
+                {isLoading ? <Spinner animation="border" size="sm" /> : "Save"}
               </Button>
             </Col>
           </Row>
@@ -154,11 +171,7 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
           <Row className="justify-content-md-center">
             <Col md={3} className="text-center">
               <Image
-                src={
-                  userInfo.picturePath
-                    ? `http://localhost:3001/assets/${userInfo.picturePath}`
-                    : profileHolder
-                }
+                src={formData.picturePath}
                 roundedCircle
                 style={{
                   width: "150px",
@@ -169,10 +182,11 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
             </Col>
             <Col md={9}>
               <h2>{`${userInfo.firstName} ${userInfo.lastName}`}</h2>
-              <p>{userInfo.bio}</p>
               <p>
                 <strong>Joined:</strong> {formatDate(userInfo.createdAt)}
               </p>
+              <strong>Bio:</strong>
+              <p>{userInfo.bio}</p>
             </Col>
           </Row>
         </>

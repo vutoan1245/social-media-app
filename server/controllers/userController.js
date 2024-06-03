@@ -36,7 +36,7 @@ export const editUserInfo = async (req, res) => {
   try {
     const userId = req.params.id;
     const { firstName, lastName, bio } = req.body;
-    const picturePath = req.file ? req.file.filename : null;
+    const picturePath = req.file ? req.file.filename : undefined;
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
