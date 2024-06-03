@@ -9,7 +9,7 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
     firstName: userInfo.firstName,
     lastName: userInfo.lastName,
     bio: userInfo.bio,
-    picturePath: userInfo.picturePath,
+    picturePath: "http://localhost:3001/assets/" + userInfo.picturePath,
     pictureFile: null, // New state to hold the file object
   });
   const token = useSelector((state) => state.token);
@@ -98,11 +98,7 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
           <Row className="justify-content-md-center">
             <Col md={3} className="text-center">
               <Image
-                src={
-                  userInfo.picturePath
-                    ? `http://localhost:3001/assets/${userInfo.picturePath}`
-                    : profileHolder
-                }
+                src={formData.picturePath}
                 roundedCircle
                 style={{
                   width: "150px",
