@@ -3,19 +3,14 @@ import { Card, Row, Col, Image } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useNavigate } from "react-router-dom";
 import profileHolder from "../assets/Profile-Photo-Place-Holder.png";
+import { formatDistanceToNow } from "date-fns";
 
-const Post = ({
-  userId,
-  postId,
-  picturePath,
-  name,
-  content,
-  timestamp,
-  likes,
-  isLiked,
-  onLike,
-  images = [], // Default to an empty array if images are not provided
-}) => {
+// Utility function for time difference calculation
+const calculateTimeDifference = (timestamp) => {
+  return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
+};
+
+const Post = ({ userId, post, isLiked, onLike }) => {
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
@@ -23,7 +18,7 @@ const Post = ({
   };
 
   const handleLikeClick = () => {
-    onLike(postId);
+    onLike(post.id);
   };
 
   return (
@@ -33,8 +28,8 @@ const Post = ({
           <Col xs="auto">
             <Image
               src={
-                picturePath
-                  ? `http://localhost:3001/assets/${picturePath}`
+                post.userId.picturePath
+                  ? `http://localhost:3001/assets/${post.userId.picturePath}`
                   : profileHolder
               }
               roundedCircle
@@ -47,15 +42,17 @@ const Post = ({
           <Col>
             <h5 className="mb-0">
               <span role="button" onClick={handleProfileClick}>
-                {name}
+                {post.userId.firstName + " " + post.userId.lastName}
               </span>
-              <small className="text-muted">{" - " + timestamp}</small>
+              <small className="text-muted">
+                {" - " + calculateTimeDifference(post.createdAt)}
+              </small>
             </h5>
           </Col>
         </Row>
-        <Card.Text>{content}</Card.Text>
+        <Card.Text>{post.content}</Card.Text>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
-          {images.map((image, index) => (
+          {post.images.map((image, index) => (
             <Image
               key={index}
               src={`http://localhost:3001/assets/${image}`}
@@ -76,7 +73,7 @@ const Post = ({
                 isLiked ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"
               }
             />{" "}
-            Like {likes}
+            Like {Object.keys(post.likes).length}
           </Col>
           <Col role="button">
             <i className="bi bi-chat-left-text" /> Comment

@@ -13,7 +13,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [userInfo, setUserInfo] = useState(null);
   const token = useSelector((state) => state.token);
-  const myUserId = useSelector((state) => state.user._id);
+  const currUserId = useSelector((state) => state.user.id);
   const { userId } = useParams();
   const dispatch = useDispatch();
 
@@ -85,7 +85,7 @@ const ProfilePage = () => {
                 {userInfo && (
                   <UserInfo userInfo={userInfo} setUserInfo={setUserInfo} />
                 )}
-                {myUserId === userId && <PostInput />}
+                {currUserId === userId && <PostInput />}
                 <Feed />
               </>
             )}

@@ -2,12 +2,6 @@ import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state/state";
 import Post from "./Post";
-import { formatDistanceToNow } from "date-fns";
-
-// Utility function for time difference calculation
-const calculateTimeDifference = (timestamp) => {
-  return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
-};
 
 const Feed = () => {
   const dispatch = useDispatch();
@@ -37,10 +31,7 @@ const Feed = () => {
 
         const res = await fetchRes.json();
 
-        const newPosts = posts.map((post) =>
-          post._id === res._id ? res : post
-        );
-
+        const newPosts = posts.map((post) => (post.id === res.id ? res : post));
         dispatch(setPosts({ posts: newPosts }));
       } catch (error) {
         console.error("Error liking post:", error);
@@ -53,18 +44,11 @@ const Feed = () => {
     <>
       {posts.map((post) => (
         <Post
-          key={post._id}
+          key={post.id}
           userId={post.userId.id}
-          postId={post._id}
-          profilePic={"https://via.placeholder.com/50"}
-          name={`${post.userId.firstName} ${post.userId.lastName}`}
-          content={post.content}
-          images={post.images}
-          timestamp={calculateTimeDifference(post.createdAt)}
-          likes={Object.keys(post.likes).length}
-          isLiked={!!post.likes[user._id]}
+          post={post}
+          isLiked={!!post.likes[user.id]}
           onLike={onLike}
-          picturePath={post.userId.picturePath}
         />
       ))}
     </>

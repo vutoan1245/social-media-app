@@ -7,6 +7,7 @@ export const register = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
     const picturePath = req.file ? req.file.filename : null;
+
     if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ message: "All fields are required." });
     }
@@ -23,7 +24,8 @@ export const register = async (req, res) => {
     });
 
     const savedUser = await newUser.save();
-    const userResponse = { ...savedUser._doc };
+    const userResponse = { ...savedUser._doc, id: savedUser._id };
+    delete userResponse._id;
     delete userResponse.password;
 
     res.status(201).json(userResponse);
@@ -55,7 +57,8 @@ export const login = async (req, res) => {
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    const userResponse = { ...user._doc };
+    const userResponse = { ...user._doc, id: user._id };
+    delete userResponse._id;
     delete userResponse.password;
 
     res.status(200).json({ token, user: userResponse });

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const SideBar = () => {
-  const userId = useSelector((state) => state.user._id);
+  const userId = useSelector((state) => state.user.id);
   const navigate = useNavigate();
 
   const styles = {
