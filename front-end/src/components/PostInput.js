@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Form, Button, Card, Alert, Spinner, Image } from "react-bootstrap";
-import { setPosts } from "state/state";
+import { addPostToBeginning } from "state/state";
 
 const PostInput = () => {
   const [postContent, setPostContent] = useState("");
@@ -10,6 +10,7 @@ const PostInput = () => {
   const [error, setError] = useState("");
   const fileInputRef = useRef(null);
   const token = useSelector((state) => state.token);
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const handleImageChange = (e) => {
@@ -41,8 +42,10 @@ const PostInput = () => {
         throw new Error("Failed to create post");
       }
 
-      const posts = await fetchRes.json();
-      dispatch(setPosts({ posts }));
+      const newPost = await fetchRes.json();
+      dispatch(
+        addPostToBeginning({ post: { ...newPost, userId: { ...user } } })
+      );
     } catch (error) {
       setError("Failed to create post. Please try again.");
       console.error("Post creation error:", error);

@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "state/state";
+import { setPost } from "state/state";
 import Post from "./Post";
 
 const Feed = () => {
@@ -31,13 +31,12 @@ const Feed = () => {
 
         const res = await fetchRes.json();
 
-        const newPosts = posts.map((post) => (post.id === res.id ? res : post));
-        dispatch(setPosts({ posts: newPosts }));
+        dispatch(setPost({ post: res }));
       } catch (error) {
         console.error("Error liking post:", error);
       }
     },
-    [posts, token, dispatch]
+    [token, dispatch]
   );
 
   return (

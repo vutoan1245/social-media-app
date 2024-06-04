@@ -23,10 +23,14 @@ const authSlice = createSlice({
       state.posts = posts;
     },
     setPost: (state, { payload: { post } }) => {
-      state.posts = state.posts.map((p) => (p.id === post.id ? post : p));
+      state.posts = [...state.posts.map((p) => (p.id === post.id ? post : p))];
+    },
+    addPostToBeginning: (state, { payload: { post } }) => {
+      state.posts = [post, ...state.posts];
     },
   },
 });
 
-export const { setLogin, setLogout, setPosts, setPost } = authSlice.actions;
+export const { setLogin, setLogout, setPosts, setPost, addPostToBeginning } =
+  authSlice.actions;
 export default authSlice.reducer;

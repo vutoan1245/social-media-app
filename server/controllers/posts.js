@@ -1,5 +1,4 @@
 import Post from "../models/Post.js";
-import User from "../models/User.js";
 
 // Create new post
 export const createPost = async (req, res) => {
@@ -16,14 +15,9 @@ export const createPost = async (req, res) => {
       comments: [],
       likes: {},
     });
-    await newPost.save();
+    const savedPost = await newPost.save();
 
-    const posts = await Post.find().populate(
-      "userId",
-      "firstName lastName picturePath"
-    );
-    posts.sort((a, b) => b.createdAt - a.createdAt);
-    res.status(201).json(posts);
+    res.status(201).json(savedPost);
   } catch (err) {
     res.status(409).json({ message: err.message });
   }
