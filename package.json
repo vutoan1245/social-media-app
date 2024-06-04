@@ -1,0 +1,13 @@
+{
+  "name": "social-media-app",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\" \"npm run start:tailwind\"",
+    "start:frontend": "cd front-end && npm start && npm run tailwind",
+    "start:backend": "cd server && npm start",
+    "start:tailwind": "cd front-end && npm run tailwind"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

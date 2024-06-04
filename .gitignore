@@ -1,0 +1,35 @@
+# Ignore node_modules
+node_modules/
+
+# Ignore .env files
+.env
+
+# Ignore log files
+*.log
+
+# Ignore the build folder
+/dist
+
+# Ignore IDE specific files
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+*.swn
+*.bak
+*.orig
+*.pyc
+*.pyo
+*.rbc
+*.sass-cache
+*.swp
+*.swo
+*.swn
+*.bak
+*.orig
+*.pyc
+*.pyo
+*.rbc
+*.sass-cache
+.DS_Store
