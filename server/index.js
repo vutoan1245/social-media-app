@@ -8,8 +8,8 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
-import authRoutes from "./routes/auth.js";
-import postRoutes from "./routes/post.js";
+import authRoutes from "./routes/authRoutes.js";
+import postRoutes from "./routes/postRoutes.js";
 import userRoutes from "./routes/userRoutes.js"; // Import the user routes
 import { verifyToken } from "./middleware/authMiddleware.js";
 
@@ -41,7 +41,7 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 // Routes
 app.use("/auth", authRoutes);
-app.use("/posts", verifyToken, postRoutes);
+app.use("/posts", postRoutes);
 app.use("/user", userRoutes); // Add the user routes with verifyToken middleware
 
 // Error Handling Middleware

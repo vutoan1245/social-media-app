@@ -36,7 +36,7 @@ const ProfilePage = () => {
         }
 
         const postsResponse = await fetch(
-          `http://localhost:3001/posts/${userId}/posts`,
+          `http://localhost:3001/posts/user/${userId}`,
           {
             method: "GET",
             headers: {

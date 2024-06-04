@@ -5,10 +5,18 @@ import { uploadSingle } from "../middleware/fileUploadMiddleware.js";
 
 const router = express.Router();
 
-// Route to get user information
+/**
+ * @route   GET /users/:id
+ * @desc    Get user information
+ * @access  Private
+ */
 router.get("/:id", verifyToken, getUserInfo);
 
-// Route to edit user information
+/**
+ * @route   PUT /users/:id
+ * @desc    Edit user information
+ * @access  Private
+ */
 router.put("/:id", verifyToken, uploadSingle, editUserInfo);
 
 export default router;
