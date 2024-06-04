@@ -2,38 +2,31 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "state/state";
-import {
-  Form,
-  Button,
-  Container,
-  Row,
-  Col,
-  Alert,
-  Spinner,
-} from "react-bootstrap";
 
 const EmailField = ({ email, setEmail }) => (
-  <Form.Group className="mb-3" controlId="formEmail">
-    <Form.Label>Email address</Form.Label>
-    <Form.Control
+  <div className="mb-4">
+    <label className="block text-gray-700">Email address</label>
+    <input
       type="email"
       placeholder="Enter email"
       value={email}
       onChange={(event) => setEmail(event.target.value)}
+      className="mt-1 block w-full rounded-md border-black-600 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
     />
-  </Form.Group>
+  </div>
 );
 
 const PasswordField = ({ password, setPassword }) => (
-  <Form.Group className="mb-3" controlId="formPassword">
-    <Form.Label>Password</Form.Label>
-    <Form.Control
+  <div className="mb-4">
+    <label className="block text-gray-700">Password</label>
+    <input
       type="password"
       placeholder="Enter password"
       value={password}
       onChange={(event) => setPassword(event.target.value)}
+      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
     />
-  </Form.Group>
+  </div>
 );
 
 const SignIn = () => {
@@ -79,33 +72,60 @@ const SignIn = () => {
   };
 
   return (
-    <Container
-      className="auth-inner"
-      style={{ maxWidth: "400px", marginTop: "6rem" }}
-    >
-      <Row className="justify-content-md-center">
-        <Col>
-          <Form onSubmit={onSubmit}>
-            <h3>Sign In</h3>
+    <div className="max-w-md mx-auto mt-24 p-6 bg-white rounded-lg shadow-md">
+      <h3 className="text-2xl font-bold mb-6 text-center">Sign In</h3>
 
-            {error && <Alert variant="danger">{error}</Alert>}
+      {error && (
+        <div className="mb-4 text-red-600 bg-red-100 p-3 rounded-md">
+          {error}
+        </div>
+      )}
 
-            <EmailField email={email} setEmail={setEmail} />
-            <PasswordField password={password} setPassword={setPassword} />
+      <form onSubmit={onSubmit}>
+        <EmailField email={email} setEmail={setEmail} />
+        <PasswordField password={password} setPassword={setPassword} />
 
-            <div className="d-grid mb-3">
-              <Button variant="primary" type="submit" disabled={loading}>
-                {loading ? <Spinner animation="border" size="sm" /> : "Submit"}
-              </Button>
-            </div>
+        <div className="mb-4">
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-300"
+          >
+            {loading ? (
+              <svg
+                className="animate-spin h-5 w-5 mx-auto"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.964 7.964 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+            ) : (
+              "Submit"
+            )}
+          </button>
+        </div>
 
-            <p className="forgot-password text-right">
-              Register a new account <Link to="/sign-up">Sign up?</Link>
-            </p>
-          </Form>
-        </Col>
-      </Row>
-    </Container>
+        <p className="text-right">
+          Register a new account{" "}
+          <Link to="/sign-up" className="text-blue-500 hover:underline">
+            Sign up?
+          </Link>
+        </p>
+      </form>
+    </div>
   );
 };
 

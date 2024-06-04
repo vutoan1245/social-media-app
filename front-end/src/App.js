@@ -19,25 +19,23 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <div className="auth-wrapper">
-          <Routes>
-            <Route
-              path="/"
-              element={isAuth ? <Navigate to="/home" /> : <SignInPage />}
-            />
+        <Routes>
+          <Route
+            path="/"
+            element={isAuth ? <Navigate to="/home" /> : <SignInPage />}
+          />
 
-            <Route path="/sign-in" element={<SignInPage />} />
-            <Route path="/sign-up" element={<SignUpPage />} />
-            <Route
-              path="/home"
-              element={isAuth ? <HomePage /> : <Navigate to="/sign-in" />}
-            />
-            <Route
-              path="/profile/:userId"
-              element={isAuth ? <ProfilePage /> : <Navigate to="/sign-in" />}
-            />
-          </Routes>
-        </div>
+          <Route path="/sign-in" element={<SignInPage />} />
+          <Route path="/sign-up" element={<SignUpPage />} />
+          <Route
+            path="/home"
+            element={isAuth ? <HomePage /> : <Navigate to="/sign-in" />}
+          />
+          <Route
+            path="/profile/:userId"
+            element={isAuth ? <ProfilePage /> : <Navigate to="/sign-in" />}
+          />
+        </Routes>
       </div>
     </Router>
   );

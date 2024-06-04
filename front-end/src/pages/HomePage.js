@@ -46,7 +46,15 @@ const HomePage = () => {
           <Col md={3} style={{ paddingRight: "0" }}>
             <SideBar />
           </Col>
-          <Col md={9} style={{ marginTop: "5rem" }}>
+          <Col
+            md={9}
+            style={{
+              marginTop: "5rem",
+              maxWidth: "1000px",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
             {loading ? (
               <div style={{ textAlign: "center", marginTop: "2rem" }}>
                 <Spinner animation="border" />
