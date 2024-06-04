@@ -2,36 +2,30 @@ import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state/state";
 import Post from "./Post";
+import { makeSelectFeed } from "../state/selectors/selectors";
 
 const Feed = () => {
   const dispatch = useDispatch();
-  const { posts, token, user } = useSelector((state) => ({
-    posts: state.posts,
-    token: state.token,
-    user: state.user,
-  }));
+  const { posts, token, user } = useSelector(makeSelectFeed);
 
   const onLike = useCallback(
     async (postId) => {
       try {
-        const fetchRes = await fetch(
-          `http://localhost:3001/posts/${postId}/like`,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await fetch(`http://localhost:3001/posts/${postId}/like`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-        if (!fetchRes.ok) {
+        if (!res.ok) {
           throw new Error("Failed to like the post");
         }
 
-        const res = await fetchRes.json();
+        const updatedPost = await res.json();
 
-        dispatch(setPost({ post: res }));
+        dispatch(setPost({ post: updatedPost }));
       } catch (error) {
         console.error("Error liking post:", error);
       }
