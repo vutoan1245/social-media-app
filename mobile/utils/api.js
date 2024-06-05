@@ -13,11 +13,10 @@ export const loginUser = async (email, password) => {
 };
 
 export const registerUser = async (userData) => {
-  return axios({
-    method: "post",
-    url: API_BASE_URL + "/auth/register",
-    data: userData,
-    headers: { "Content-Type": "multipart/form-data" },
+  return api.post("/auth/register", userData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
   });
 };
 
