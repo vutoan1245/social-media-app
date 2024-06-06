@@ -3,7 +3,7 @@ import Post from "./Post";
 import { makeSelectFeed } from "../state/selectors/selectors";
 
 const Feed = () => {
-  const { posts, user } = useSelector(makeSelectFeed);
+  const { posts } = useSelector(makeSelectFeed);
 
   return (
     <>
