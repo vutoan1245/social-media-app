@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Col, Spinner } from "react-bootstrap";
-import NavBar from "../components/NavBar";
-import SideBar from "../components/SideBar";
-import Feed from "../components/Feed";
-import PostInput from "../components/PostInput";
-import UserInfo from "../components/UserInfo";
 import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "../state/state";
 import { useParams } from "react-router-dom";
+import NavBar from "components/NavBar";
+import Feed from "components/Feed";
+import PostInput from "components/PostInput";
+import UserInfo from "components/UserInfo";
+import { SpinnerIcon } from "assets/icons";
+import { setPosts } from "state/state";
 import { fetchUserData, fetchUserPosts } from "api/userApi";
 
 const ProfilePage = () => {
@@ -42,37 +41,26 @@ const ProfilePage = () => {
     }
   }, [token, userId, dispatch]);
 
-  const styles = {
-    contentCol: {
-      marginTop: "5rem",
-    },
-  };
-
   return (
     <>
       <NavBar />
-      <Container fluid>
-        <Row>
-          <Col md={3} style={{ paddingRight: "0" }}>
-            <SideBar />
-          </Col>
-          <Col md={9} style={styles.contentCol}>
-            {loading ? (
-              <div style={{ textAlign: "center", marginTop: "2rem" }}>
-                <Spinner animation="border" />
-              </div>
-            ) : (
-              <>
-                {userInfo && (
-                  <UserInfo userInfo={userInfo} setUserInfo={setUserInfo} />
-                )}
-                {currUserId === userId && <PostInput />}
-                <Feed />
-              </>
-            )}
-          </Col>
-        </Row>
-      </Container>
+      <div className="flex flex-col lg:flex-row mt-20">
+        <div className="w-full md:w-3/4 md:mx-auto lg:w-1/2 lg:mx-auto px-4">
+          {loading ? (
+            <div style={{ textAlign: "center", marginTop: "2rem" }}>
+              <SpinnerIcon className="text-black" animation="border" />
+            </div>
+          ) : (
+            <>
+              {userInfo && (
+                <UserInfo userInfo={userInfo} setUserInfo={setUserInfo} />
+              )}
+              {currUserId === userId && <PostInput />}
+              <Feed />
+            </>
+          )}
+        </div>
+      </div>
     </>
   );
 };
