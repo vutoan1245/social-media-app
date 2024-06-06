@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setLogin } from "state/state";
-import { SpinnerIcon } from "assets/icons";
+import { setLogin } from "../state/state";
+import { SpinnerIcon } from "../assets/icons";
 import TextField from "./common/TextField";
 import { loginUser } from "../api/authApi";
 
@@ -21,13 +21,9 @@ const SignIn = () => {
 
     try {
       const loggedInRes = await loginUser(email, password);
-
       if (loggedInRes) {
         dispatch(
-          setLogin({
-            user: loggedInRes.user,
-            token: loggedInRes.token,
-          })
+          setLogin({ user: loggedInRes.user, token: loggedInRes.token })
         );
         navigate("/home");
       }
@@ -41,13 +37,11 @@ const SignIn = () => {
   return (
     <div className="max-w-md mx-auto mt-24 p-6 bg-white rounded-lg shadow-md">
       <h3 className="text-2xl font-bold mb-6 text-center">Sign In</h3>
-
       {error && (
         <div className="mb-4 text-red-600 bg-red-100 p-3 rounded-md">
           {error}
         </div>
       )}
-
       <form onSubmit={onSubmit}>
         <TextField
           label="Email Address"
@@ -63,7 +57,6 @@ const SignIn = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-
         <div className="mb-4">
           <button
             type="submit"
@@ -73,7 +66,6 @@ const SignIn = () => {
             {loading ? <SpinnerIcon /> : "Submit"}
           </button>
         </div>
-
         <p className="text-right">
           Register a new account{" "}
           <Link to="/sign-up" className="text-blue-500 hover:underline">
