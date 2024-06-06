@@ -8,8 +8,7 @@ import UserInfo from "../components/UserInfo";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "../state/state";
 import { useParams } from "react-router-dom";
-import { fetchUserData } from "api/userApi";
-import { fetchUserPosts } from "api/postsApi";
+import { fetchUserData, fetchUserPosts } from "api/userApi";
 
 const ProfilePage = () => {
   const [loading, setLoading] = useState(true);

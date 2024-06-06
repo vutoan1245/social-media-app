@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import Post from "../models/Post.js";
 import NodeCache from "node-cache";
 
 const cache = new NodeCache({ stdTTL: 100, checkperiod: 120 }); // Cache for 100 seconds
@@ -60,5 +61,21 @@ export const editUserInfo = async (req, res) => {
   } catch (err) {
     console.error("Edit user info error:", err);
     res.status(500).json({ error: "Server error. Please try again later." });
+  }
+};
+
+/* Get USER POSTS */
+export const getUserPosts = async (req, res) => {
+  try {
+    console.log("Getting user posts");
+    const { userId } = req.params;
+    const posts = await Post.find({ userId }).populate(
+      "userId",
+      "firstName lastName picturePath"
+    );
+    posts.sort((a, b) => b.createdAt - a.createdAt);
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
   }
 };

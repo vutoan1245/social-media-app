@@ -20,3 +20,12 @@ export const updateUser = async (userId, formData, token) => {
   });
   return response.data;
 };
+
+export const fetchUserPosts = async (userId, token) => {
+  const response = await axios.get(`${API_BASE_URL}/user/${userId}/posts`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};

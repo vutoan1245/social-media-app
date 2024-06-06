@@ -1,19 +1,30 @@
 import express from "express";
-import { getUserInfo, editUserInfo } from "../controllers/userController.js";
+import {
+  getUserPosts,
+  getUserInfo,
+  editUserInfo,
+} from "../controllers/userController.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
 import { uploadSingle } from "../middleware/fileUploadMiddleware.js";
 
 const router = express.Router();
 
 /**
- * @route   GET /users/:id
+ * @route   GET /user/:userId/posts
+ * @desc    Get all posts by a specific user
+ * @access  Private
+ */
+router.get("/:userId/posts", verifyToken, getUserPosts);
+
+/**
+ * @route   GET /user/:id
  * @desc    Get user information
  * @access  Private
  */
 router.get("/:id", verifyToken, getUserInfo);
 
 /**
- * @route   PUT /users/:id
+ * @route   PUT /user/:id
  * @desc    Edit user information
  * @access  Private
  */
