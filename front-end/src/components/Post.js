@@ -1,13 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import profileHolder from "../assets/Profile-Photo-Place-Holder.png";
 import { formatDistanceToNow } from "date-fns";
-import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "../state/state";
 import { LikeIcon, CommentIcon, ShareIcon } from "../assets/icons";
 import { likePost } from "../api/postsApi";
 
-// Utility function for time difference calculation
 const calculateTimeDifference = (timestamp) => {
   return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
 };
@@ -17,9 +16,7 @@ const Post = ({ userId, post, isLiked }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleProfileClick = () => {
-    navigate(`/profile/${userId}`);
-  };
+  const handleProfileClick = () => navigate(`/profile/${userId}`);
 
   const onLike = async (postId) => {
     try {
@@ -61,7 +58,7 @@ const Post = ({ userId, post, isLiked }) => {
           <img
             key={index}
             src={`${process.env.REACT_APP_API_BASE_URL}/assets/${image}`}
-            alt={`Post  ${index + 1}`}
+            alt={`Post ${index + 1}`}
             className="w-36 h-36 object-cover m-1 rounded"
           />
         ))}
