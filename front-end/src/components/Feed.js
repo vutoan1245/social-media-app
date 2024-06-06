@@ -8,12 +8,7 @@ const Feed = () => {
   return (
     <>
       {posts.map((post) => (
-        <Post
-          key={post.id}
-          userId={post.userId.id}
-          post={post}
-          isLiked={!!post.likes[user.id]}
-        />
+        <Post key={post.id} post={post} />
       ))}
     </>
   );

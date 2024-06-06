@@ -11,12 +11,14 @@ const calculateTimeDifference = (timestamp) => {
   return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
 };
 
-const Post = ({ userId, post, isLiked }) => {
+const Post = ({ post }) => {
   const token = useSelector((state) => state.token);
+  const currUserId = useSelector((state) => state.user.id);
+  const isLiked = !!post.likes[currUserId];
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleProfileClick = () => navigate(`/profile/${userId}`);
+  const handleProfileClick = () => navigate(`/profile/${post.userId.id}`);
 
   const onLike = async (postId) => {
     try {
