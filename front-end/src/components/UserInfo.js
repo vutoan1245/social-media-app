@@ -10,7 +10,7 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
     lastName: userInfo.lastName,
     bio: userInfo.bio,
     picturePath: userInfo.picturePath
-      ? `http://localhost:3001/assets/${userInfo.picturePath}`
+      ? `${process.env.REACT_APP_API_BASE_URL}/assets/${userInfo.picturePath}`
       : profileHolder,
     pictureFile: null, // New state to hold the file object
   });
@@ -40,7 +40,7 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
       }
 
       const response = await fetch(
-        `http://localhost:3001/user/${userInfo.id}`,
+        `${process.env.REACT_APP_API_BASE_URL}/user/${userInfo.id}`,
         {
           method: "PUT",
           headers: {
@@ -56,7 +56,7 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
         setFormData({
           ...updatedUser,
           picturePath: updatedUser.picturePath
-            ? `http://localhost:3001/assets/${updatedUser.picturePath}`
+            ? `${process.env.REACT_APP_API_BASE_URL}/assets/${updatedUser.picturePath}`
             : profileHolder,
           pictureFile: null, // Reset the pictureFile after save
         });

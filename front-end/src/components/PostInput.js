@@ -29,13 +29,16 @@ const PostInput = () => {
     });
 
     try {
-      const fetchRes = await fetch(`http://localhost:3001/posts`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
+      const fetchRes = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/posts`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
 
       if (!fetchRes.ok) {
         throw new Error("Failed to create post");

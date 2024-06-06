@@ -11,13 +11,16 @@ const Feed = () => {
   const onLike = useCallback(
     async (postId) => {
       try {
-        const res = await fetch(`http://localhost:3001/posts/${postId}/like`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await fetch(
+          `${process.env.REACT_APP_API_BASE_URL}/posts/${postId}/like`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!res.ok) {
           throw new Error("Failed to like the post");

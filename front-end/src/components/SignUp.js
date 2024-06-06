@@ -59,10 +59,13 @@ const Register = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/auth/register`, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/auth/register`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to register");

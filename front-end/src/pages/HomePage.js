@@ -15,12 +15,15 @@ const HomePage = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch("http://localhost:3001/posts", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
-          },
-        });
+        const response = await fetch(
+          `${process.env.REACT_APP_API_BASE_URL}/posts`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
+            },
+          }
+        );
         const posts = await response.json();
 
         if (posts) {

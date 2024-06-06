@@ -21,7 +21,7 @@ const ProfilePage = () => {
     const fetchUserData = async () => {
       try {
         const userResponse = await fetch(
-          `http://localhost:3001/user/${userId}`,
+          `${process.env.REACT_APP_API_BASE_URL}/user/${userId}`,
           {
             method: "GET",
             headers: {
@@ -36,7 +36,7 @@ const ProfilePage = () => {
         }
 
         const postsResponse = await fetch(
-          `http://localhost:3001/posts/user/${userId}`,
+          `${process.env.REACT_APP_API_BASE_URL}/posts/user/${userId}`,
           {
             method: "GET",
             headers: {

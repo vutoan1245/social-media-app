@@ -25,7 +25,7 @@ const Post = ({ userId, post, isLiked, onLike }) => {
         <img
           src={
             post.userId.picturePath
-              ? `http://localhost:3001/assets/${post.userId.picturePath}`
+              ? `${process.env.REACT_APP_API_BASE_URL}/assets/${post.userId.picturePath}`
               : profileHolder
           }
           alt="Profile"
@@ -49,7 +49,7 @@ const Post = ({ userId, post, isLiked, onLike }) => {
         {post.images.map((image, index) => (
           <img
             key={index}
-            src={`http://localhost:3001/assets/${image}`}
+            src={`${process.env.REACT_APP_API_BASE_URL}/assets/${image}`}
             alt={`Post  ${index + 1}`}
             className="w-36 h-36 object-cover m-1 rounded"
           />
