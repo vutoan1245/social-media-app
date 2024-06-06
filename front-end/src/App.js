@@ -10,7 +10,6 @@ import HomePage from "pages/HomePage";
 import SignInPage from "pages/SigninPage";
 import SignUpPage from "pages/SignupPage";
 import ProfilePage from "pages/ProfilePage";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const isAuth = Boolean(useSelector((state) => state.token));
