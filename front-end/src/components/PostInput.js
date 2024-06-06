@@ -24,8 +24,14 @@ const PostInput = () => {
     setLoading(true);
     setError("");
 
+    const formData = new FormData();
+    formData.append("content", postContent);
+    images.forEach((image) => {
+      formData.append("pictures", image);
+    });
+
     try {
-      const newPost = await createPost(postContent, images, token);
+      const newPost = await createPost(formData, token);
       dispatch(
         addPostToBeginning({ post: { ...newPost, userId: { ...user } } })
       );
