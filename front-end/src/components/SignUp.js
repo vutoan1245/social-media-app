@@ -1,36 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SpinnerIcon } from "assets/icons";
-
-/**
- * A form field component for handling text inputs.
- */
-const TextField = ({ label, type, placeholder, value, onChange }) => (
-  <div className="mb-4">
-    <label className="block text-gray-700">{label}</label>
-    <input
-      type={type}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-    />
-  </div>
-);
-
-/**
- * A form field component for handling file inputs.
- */
-const FileField = ({ label, onChange }) => (
-  <div className="mb-4">
-    <label className="block text-gray-700">{label}</label>
-    <input
-      type="file"
-      onChange={onChange}
-      className="mt-1 block w-full text-gray-700"
-    />
-  </div>
-);
+import TextField from "./common/TextField";
+import FileField from "./common/FileField";
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
@@ -42,9 +14,6 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  /**
-   * Handles form submission for user registration.
-   */
   const handleRegister = async (event) => {
     event.preventDefault();
     setLoading(true);

@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import profileHolder from "../assets/Profile-Photo-Place-Holder.png";
 import { useSelector } from "react-redux";
 import { EditIcon, CancelIcon, SpinnerIcon } from "../assets/icons";
+import TextField from "./common/TextField";
 
 const UserInfo = ({ userInfo, setUserInfo }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -123,28 +124,20 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
             />
           </div>
           <div className="md:col-span-2">
-            <div className="mb-4">
-              <label className="block text-gray-700">First Name</label>
-              <input
-                type="text"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleInputChange}
-                disabled={isLoading}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Last Name</label>
-              <input
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                disabled={isLoading}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-              />
-            </div>
+            <TextField
+              id="firstName"
+              label="First Name"
+              value={formData.firstName}
+              onChange={handleInputChange}
+              disabled={isLoading}
+            />
+            <TextField
+              id="lastName"
+              label="Last Name"
+              value={formData.lastName}
+              onChange={handleInputChange}
+              disabled={isLoading}
+            />
             <div className="mb-4">
               <label className="block text-gray-700">Bio</label>
               <textarea

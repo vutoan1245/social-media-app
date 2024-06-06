@@ -3,32 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "state/state";
 import { SpinnerIcon } from "assets/icons";
-
-const EmailField = ({ email, setEmail }) => (
-  <div className="mb-4">
-    <label className="block text-gray-700">Email address</label>
-    <input
-      type="email"
-      placeholder="Enter email"
-      value={email}
-      onChange={(event) => setEmail(event.target.value)}
-      className="mt-1 block w-full rounded-md border-black-600 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-    />
-  </div>
-);
-
-const PasswordField = ({ password, setPassword }) => (
-  <div className="mb-4">
-    <label className="block text-gray-700">Password</label>
-    <input
-      type="password"
-      placeholder="Enter password"
-      value={password}
-      onChange={(event) => setPassword(event.target.value)}
-      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-    />
-  </div>
-);
+import TextField from "./common/TextField"; // Import TextField component
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -86,8 +61,20 @@ const SignIn = () => {
       )}
 
       <form onSubmit={onSubmit}>
-        <EmailField email={email} setEmail={setEmail} />
-        <PasswordField password={password} setPassword={setPassword} />
+        <TextField
+          label="Email Address"
+          type="email"
+          placeholder="Enter email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextField
+          label="Password"
+          type="password"
+          placeholder="Enter password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
         <div className="mb-4">
           <button
