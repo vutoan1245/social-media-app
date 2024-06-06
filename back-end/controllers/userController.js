@@ -35,6 +35,11 @@ export const getUserInfo = async (req, res) => {
 export const editUserInfo = async (req, res) => {
   try {
     const userId = req.params.id;
+    const currentUser = req.user.id; // The user making the request
+    if (userId !== currentUser) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
     const { firstName, lastName, bio } = req.body;
     const picturePath = req.file ? req.file.filename : undefined;
 
