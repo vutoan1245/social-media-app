@@ -8,6 +8,8 @@ import UserInfo from "../components/UserInfo";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "../state/state";
 import { useParams } from "react-router-dom";
+import { fetchUserData } from "api/userApi";
+import { fetchUserPosts } from "api/postsApi";
 
 const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
@@ -18,34 +20,14 @@ const ProfilePage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const loadUserData = async () => {
       try {
-        const userResponse = await fetch(
-          `${process.env.REACT_APP_API_BASE_URL}/user/${userId}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
-            },
-          }
-        );
-        const userData = await userResponse.json();
-
+        const userData = await fetchUserData(userId, token);
         if (userData) {
           setUserInfo(userData);
         }
 
-        const postsResponse = await fetch(
-          `${process.env.REACT_APP_API_BASE_URL}/posts/user/${userId}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const posts = await postsResponse.json();
-
+        const posts = await fetchUserPosts(userId, token);
         if (posts) {
           dispatch(setPosts({ posts }));
         }
@@ -57,7 +39,7 @@ const ProfilePage = () => {
     };
 
     if (token && userId) {
-      fetchUserData();
+      loadUserData();
     }
   }, [token, userId, dispatch]);
 

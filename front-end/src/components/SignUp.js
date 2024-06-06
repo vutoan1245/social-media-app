@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { SpinnerIcon } from "assets/icons";
 import TextField from "./common/TextField";
 import FileField from "./common/FileField";
+import { registerUser } from "api/authApi";
 
-const Register = () => {
+const SignUp = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,19 +30,7 @@ const Register = () => {
     }
 
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/auth/register`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to register");
-      }
-
-      const data = await response.json();
+      const data = await registerUser(formData);
       if (data) {
         navigate("/sign-in");
       }
@@ -122,4 +111,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default SignUp;

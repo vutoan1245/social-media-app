@@ -6,6 +6,7 @@ import Feed from "../components/Feed";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state/state";
 import PostInput from "components/PostInput";
+import { fetchPosts } from "api/postsApi";
 
 const HomePage = () => {
   const token = useSelector((state) => state.token);
@@ -13,19 +14,9 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const loadPosts = async () => {
       try {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_BASE_URL}/posts`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
-            },
-          }
-        );
-        const posts = await response.json();
-
+        const posts = await fetchPosts(token);
         if (posts) {
           dispatch(setPosts({ posts }));
         }
@@ -37,7 +28,7 @@ const HomePage = () => {
     };
 
     if (token) {
-      fetchPosts();
+      loadPosts();
     }
   }, [token, dispatch]);
 

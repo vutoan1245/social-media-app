@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "state/state";
 import { SpinnerIcon } from "assets/icons";
-import TextField from "./common/TextField"; // Import TextField component
+import TextField from "./common/TextField";
+import { loginUser } from "../api/authApi";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -19,20 +20,7 @@ const SignIn = () => {
     setError("");
 
     try {
-      const res = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/auth/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        }
-      );
-
-      if (!res.ok) {
-        throw new Error("Failed to login");
-      }
-
-      const loggedInRes = await res.json();
+      const loggedInRes = await loginUser(email, password);
 
       if (loggedInRes) {
         dispatch(

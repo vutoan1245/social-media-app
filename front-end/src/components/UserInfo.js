@@ -3,6 +3,7 @@ import profileHolder from "../assets/Profile-Photo-Place-Holder.png";
 import { useSelector } from "react-redux";
 import { EditIcon, CancelIcon, SpinnerIcon } from "../assets/icons";
 import TextField from "./common/TextField";
+import { updateUser } from "../api/userApi";
 
 const UserInfo = ({ userInfo, setUserInfo }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -41,31 +42,16 @@ const UserInfo = ({ userInfo, setUserInfo }) => {
         formDataToSend.append("picture", formData.pictureFile);
       }
 
-      const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/user/${userInfo.id}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formDataToSend,
-        }
-      );
-
-      if (response.ok) {
-        const updatedUser = await response.json();
-        setUserInfo(updatedUser); // Update the user info in the parent component
-        setFormData({
-          ...updatedUser,
-          picturePath: updatedUser.picturePath
-            ? `${process.env.REACT_APP_API_BASE_URL}/assets/${updatedUser.picturePath}`
-            : profileHolder,
-          pictureFile: null, // Reset the pictureFile after save
-        });
-        setIsEditing(false);
-      } else {
-        console.error("Failed to update user information");
-      }
+      const updatedUser = await updateUser(userInfo.id, formDataToSend, token);
+      setUserInfo(updatedUser); // Update the user info in the parent component
+      setFormData({
+        ...updatedUser,
+        picturePath: updatedUser.picturePath
+          ? `${process.env.REACT_APP_API_BASE_URL}/assets/${updatedUser.picturePath}`
+          : profileHolder,
+        pictureFile: null, // Reset the pictureFile after save
+      });
+      setIsEditing(false);
     } catch (error) {
       console.error("Error saving data:", error);
     } finally {

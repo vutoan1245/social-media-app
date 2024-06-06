@@ -5,6 +5,7 @@ import { formatDistanceToNow } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "../state/state";
 import { LikeIcon, CommentIcon, ShareIcon } from "../assets/icons";
+import { likePost } from "../api/postsApi";
 
 // Utility function for time difference calculation
 const calculateTimeDifference = (timestamp) => {
@@ -22,23 +23,7 @@ const Post = ({ userId, post, isLiked }) => {
 
   const onLike = async (postId) => {
     try {
-      const res = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/posts/${postId}/like`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!res.ok) {
-        throw new Error("Failed to like the post");
-      }
-
-      const updatedPost = await res.json();
-
+      const updatedPost = await likePost(postId, token);
       dispatch(setPost({ post: updatedPost }));
     } catch (error) {
       console.error("Error liking post:", error);

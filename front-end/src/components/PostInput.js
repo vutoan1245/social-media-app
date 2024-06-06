@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addPostToBeginning } from "../state/state";
 import { ImageIcon, SpinnerIcon } from "../assets/icons";
+import { createPost } from "../api/postsApi";
 
 const PostInput = () => {
   const [postContent, setPostContent] = useState("");
@@ -30,22 +31,7 @@ const PostInput = () => {
     });
 
     try {
-      const fetchRes = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/posts`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
-
-      if (!fetchRes.ok) {
-        throw new Error("Failed to create post");
-      }
-
-      const newPost = await fetchRes.json();
+      const newPost = await createPost(formData, token);
       dispatch(
         addPostToBeginning({ post: { ...newPost, userId: { ...user } } })
       );
