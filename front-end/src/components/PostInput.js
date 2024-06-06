@@ -24,25 +24,19 @@ const PostInput = () => {
     setLoading(true);
     setError("");
 
-    const formData = new FormData();
-    formData.append("content", postContent);
-    images.forEach((image) => {
-      formData.append("pictures", image);
-    });
-
     try {
-      const newPost = await createPost(formData, token);
+      const newPost = await createPost(postContent, images, token);
       dispatch(
         addPostToBeginning({ post: { ...newPost, userId: { ...user } } })
       );
+      setPostContent("");
+      setImages([]);
+      fileInputRef.current.value = null;
     } catch (error) {
       setError("Failed to create post. Please try again.");
       console.error("Post creation error:", error);
     } finally {
       setLoading(false);
-      setPostContent("");
-      setImages([]);
-      fileInputRef.current.value = null; // Reset the file input
     }
   };
 
