@@ -2,21 +2,46 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import profileHolder from "../assets/Profile-Photo-Place-Holder.png";
 import { formatDistanceToNow } from "date-fns";
+import { useDispatch, useSelector } from "react-redux";
+import { setPost } from "state/state";
 
 // Utility function for time difference calculation
 const calculateTimeDifference = (timestamp) => {
   return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
 };
 
-const Post = ({ userId, post, isLiked, onLike }) => {
+const Post = ({ userId, post, isLiked }) => {
+  const token = useSelector((state) => state.token);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
     navigate(`/profile/${userId}`);
   };
 
-  const handleLikeClick = () => {
-    onLike(post.id);
+  const onLike = async (postId) => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/posts/${postId}/like`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to like the post");
+      }
+
+      const updatedPost = await res.json();
+
+      dispatch(setPost({ post: updatedPost }));
+    } catch (error) {
+      console.error("Error liking post:", error);
+    }
   };
 
   return (
@@ -58,7 +83,7 @@ const Post = ({ userId, post, isLiked, onLike }) => {
       <div className="flex justify-around text-center text-gray-700">
         <div
           className="flex items-center cursor-pointer"
-          onClick={handleLikeClick}
+          onClick={() => onLike(post.id)}
         >
           {isLiked ? (
             <svg
@@ -85,7 +110,6 @@ const Post = ({ userId, post, isLiked, onLike }) => {
               />
             </svg>
           )}
-
           <span className="ml-1">Like {Object.keys(post.likes).length}</span>
         </div>
         <div className="flex items-center cursor-pointer">
