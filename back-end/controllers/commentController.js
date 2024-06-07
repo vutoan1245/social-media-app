@@ -43,6 +43,7 @@ export const getComments = async (req, res) => {
         path: "userId",
         select: "firstName lastName picturePath",
       },
+      options: { sort: { createdAt: -1 } },
     });
 
     if (!post) {

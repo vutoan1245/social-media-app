@@ -49,7 +49,7 @@ const Post = ({ post }) => {
     if (!newComment.trim()) return;
     try {
       const comment = await addComment(post.id, newComment, token);
-      setComments([comment, ...comments].slice(0, 3));
+      setComments([comment, ...comments]);
       setNewComment("");
     } catch (error) {
       console.error("Error adding comment:", error);
@@ -115,7 +115,7 @@ const Post = ({ post }) => {
       {showComments && (
         <div className="mt-4">
           <div>
-            {comments.map((comment) => (
+            {comments.toReversed().map((comment) => (
               <div
                 key={comment._id}
                 className="mb-2 p-2 border-b border-gray-200 flex items-start"
