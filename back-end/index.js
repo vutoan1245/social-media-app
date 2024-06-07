@@ -11,7 +11,7 @@ import fs from "fs";
 import authRoutes from "./routes/authRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import userRoutes from "./routes/userRoutes.js"; // Import the user routes
-import { verifyToken } from "./middleware/authMiddleware.js";
+import mainRouter from "./routes/index.js";
 
 // Setup
 const __filename = fileURLToPath(import.meta.url);
@@ -40,9 +40,7 @@ app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 // Routes
-app.use("/auth", authRoutes);
-app.use("/posts", postRoutes);
-app.use("/user", userRoutes); // Add the user routes with verifyToken middleware
+app.use("", mainRouter);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {

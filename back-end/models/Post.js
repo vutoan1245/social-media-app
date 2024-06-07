@@ -1,27 +1,5 @@
 import mongoose from "mongoose";
 
-const commentSchema = new mongoose.Schema(
-  {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    comment: {
-      type: String,
-      required: true,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-  },
-  {
-    timestamps: true,
-    versionKey: false,
-  }
-);
-
 const postSchema = new mongoose.Schema(
   {
     userId: {
@@ -40,7 +18,12 @@ const postSchema = new mongoose.Schema(
         type: String,
       },
     ],
-    comments: [commentSchema],
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+      },
+    ],
     likes: {
       type: Map,
       of: Boolean,
@@ -53,12 +36,15 @@ const postSchema = new mongoose.Schema(
     toJSON: {
       virtuals: true,
       transform: (doc, ret) => {
+        ret.id = ret._id;
         delete ret._id;
         return ret;
       },
     },
   }
 );
+
+postSchema.index({ userId: 1, createdAt: -1 });
 
 const Post = mongoose.model("Post", postSchema);
 

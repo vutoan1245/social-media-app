@@ -34,3 +34,21 @@ export const fetchPosts = async (token) => {
   });
   return response.data;
 };
+
+export const fetchComments = async (postId, token) => {
+  const response = await axios.get(`${API_BASE_URL}/posts/${postId}/comments`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+export const addComment = async (postId, comment, token) => {
+  const response = await axios.post(
+    `${API_BASE_URL}/posts/${postId}/comments`,
+    { comment },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  return response.data;
+};
