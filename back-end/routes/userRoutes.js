@@ -14,20 +14,20 @@ const router = express.Router();
  * @desc    Get all posts by a specific user
  * @access  Private
  */
-router.get("/:userId/posts", verifyToken, getUserPosts);
+router.get("/user/:userId/posts", verifyToken, getUserPosts);
 
 /**
  * @route   GET /user/:id
  * @desc    Get user information
  * @access  Private
  */
-router.get("/:id", verifyToken, getUserInfo);
+router.get("/user/:id", verifyToken, getUserInfo);
 
 /**
  * @route   PUT /user/:id
  * @desc    Edit user information
  * @access  Private
  */
-router.put("/:id", verifyToken, uploadSingle, editUserInfo);
+router.put("/user/:id", verifyToken, uploadSingle, editUserInfo);
 
 export default router;

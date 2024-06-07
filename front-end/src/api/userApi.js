@@ -3,7 +3,7 @@ import axios from "axios";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export const fetchUserData = async (userId, token) => {
-  const response = await axios.get(`${API_BASE_URL}/user/${userId}`, {
+  const response = await axios.get(`${API_BASE_URL}/api/user/${userId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -12,17 +12,21 @@ export const fetchUserData = async (userId, token) => {
 };
 
 export const updateUser = async (userId, formData, token) => {
-  const response = await axios.put(`${API_BASE_URL}/user/${userId}`, formData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const response = await axios.put(
+    `${API_BASE_URL}/api/user/${userId}`,
+    formData,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
   return response.data;
 };
 
 export const fetchUserPosts = async (userId, token) => {
-  const response = await axios.get(`${API_BASE_URL}/user/${userId}/posts`, {
+  const response = await axios.get(`${API_BASE_URL}/api/user/${userId}/posts`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

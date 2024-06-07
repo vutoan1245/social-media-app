@@ -9,13 +9,13 @@ const router = express.Router();
  * @desc    Register a new user
  * @access  Public
  */
-router.post("/register", uploadSingle, register);
+router.post("/auth/register", uploadSingle, register);
 
 /**
  * @route   POST /auth/login
  * @desc    Login a user
  * @access  Public
  */
-router.post("/login", login);
+router.post("/auth/login", login);
 
 export default router;

@@ -40,7 +40,7 @@ app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 // Routes
-app.use("", mainRouter);
+app.use("/api", mainRouter);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {

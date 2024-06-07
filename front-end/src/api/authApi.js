@@ -3,7 +3,7 @@ import axios from "axios";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export const loginUser = async (email, password) => {
-  const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+  const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
     email,
     password,
   });
@@ -11,10 +11,14 @@ export const loginUser = async (email, password) => {
 };
 
 export const registerUser = async (formData) => {
-  const response = await axios.post(`${API_BASE_URL}/auth/register`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const response = await axios.post(
+    `${API_BASE_URL}/api/auth/register`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
   return response.data;
 };

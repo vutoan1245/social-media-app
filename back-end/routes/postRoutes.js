@@ -14,20 +14,20 @@ const router = express.Router();
  * @desc    Create a new post
  * @access  Private
  */
-router.post("/", verifyToken, uploadMultiple, createPost);
+router.post("/posts", verifyToken, uploadMultiple, createPost);
 
 /**
  * @route   GET /posts
  * @desc    Get all posts (feed)
  * @access  Private
  */
-router.get("/", verifyToken, getFeedPosts);
+router.get("/posts", verifyToken, getFeedPosts);
 
 /**
  * @route   PATCH /posts/:id/like
  * @desc    Like or unlike a post
  * @access  Private
  */
-router.patch("/:id/like", verifyToken, likePost);
+router.patch("/posts/:id/like", verifyToken, likePost);
 
 export default router;
