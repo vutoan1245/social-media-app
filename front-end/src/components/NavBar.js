@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setLogout } from "../state/state";
+import SearchForm from "./SearchForm";
 import profileHolder from "../assets/Profile-Photo-Place-Holder.png"; // Placeholder image
 
 const NavBar = () => {
@@ -43,13 +44,16 @@ const NavBar = () => {
   return (
     <nav className="bg-blue-500 fixed w-full z-10 top-0 shadow-md">
       <div className="container mx-auto px-4 flex items-center justify-between h-16">
-        <div
-          className="text-white text-lg font-bold cursor-pointer"
-          onClick={() => navigate("/home")}
-        >
-          SocialApp
+        <div className="flex gap-7 cursor-pointer">
+          <p
+            className="m-auto font-bold text-lg text-white"
+            onClick={() => navigate("/home")}
+          >
+            SocialApp
+          </p>
+          <SearchForm />
         </div>
-        <div className="relative flex items-center space-x-4">
+        <div className="flex items-center space-x-4">
           {isAuth && (
             <div className="relative" ref={dropdownRef}>
               <button

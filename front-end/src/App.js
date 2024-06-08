@@ -10,6 +10,7 @@ import HomePage from "pages/HomePage";
 import SignInPage from "pages/SigninPage";
 import SignUpPage from "pages/SignupPage";
 import ProfilePage from "pages/ProfilePage";
+import SearchPage from "pages/SearchPage";
 
 function App() {
   const isAuth = Boolean(useSelector((state) => state.token));
@@ -35,6 +36,10 @@ function App() {
           <Route
             path="/profile/:userId"
             element={<PrivateRoute element={<ProfilePage />} />}
+          />
+          <Route
+            path="search"
+            element={<PrivateRoute element={<SearchPage />} />}
           />
         </Routes>
       </div>
