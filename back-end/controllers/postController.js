@@ -26,11 +26,10 @@ export const createPost = async (req, res) => {
 // Get all posts
 export const getFeedPosts = async (_req, res) => {
   try {
-    const posts = await Post.find().populate(
-      "userId",
-      "firstName lastName picturePath"
-    );
-    posts.sort((a, b) => b.createdAt - a.createdAt);
+    const posts = await Post.find()
+      .populate("userId", "firstName lastName picturePath")
+      .sort({ createdAt: -1 });
+
     res.status(200).json(posts);
   } catch (err) {
     res.status(404).json({ message: err.message });

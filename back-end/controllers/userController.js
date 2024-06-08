@@ -83,11 +83,10 @@ export const getUserPosts = async (req, res) => {
   try {
     console.log("Getting user posts");
     const { userId } = req.params;
-    const posts = await Post.find({ userId }).populate(
-      "userId",
-      "firstName lastName picturePath"
-    );
-    posts.sort((a, b) => b.createdAt - a.createdAt);
+    const posts = await Post.find({ userId })
+      .populate("userId", "firstName lastName picturePath")
+      .sort({ createdAt: -1 });
+
     res.status(200).json(posts);
   } catch (err) {
     res.status(404).json({ message: err.message });
