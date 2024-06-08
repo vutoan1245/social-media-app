@@ -41,10 +41,12 @@ const SearchPage = () => {
     <>
       <NavBar />
       <div className="mt-20 h-full">
-        <div className="flex flex-col gap-4 bg-white md:w-3/4 md:mx-auto lg:w-1/2 lg:mx-auto">
-          <div className="text-lg border-b border-gray-400 p-4">
-            <h2>Search Results for "{query}"</h2>
-            <h3 className="text-lg font-semibold">People</h3>
+        <div className="flex flex-col bg-white md:w-3/4 md:mx-auto lg:w-1/2 lg:mx-auto">
+          <div className="text-lg border-b border-gray-400">
+            <h2 className="p-4 border-b border-gray-400">
+              Search Results for "{query}"
+            </h2>
+            <h3 className="text-lg font-semibold p-4">People</h3>
             {results.users.length > 0 ? (
               results.users.map((user) => (
                 <div
@@ -74,16 +76,16 @@ const SearchPage = () => {
                 </div>
               ))
             ) : (
-              <p className="text-sm text-gray-500">No users found</p>
+              <p className="text-sm text-gray-500 px-4 pb-4">No users found</p>
             )}
           </div>
 
-          <div className="mt-4">
-            <h3 className="text-lg font-semibold px-4">Posts</h3>
+          <div className="">
+            <h3 className="text-lg font-semibold px-4 pt-4">Posts</h3>
             {results.posts.length > 0 ? (
               results.posts.map((post) => <Post key={post.id} post={post} />)
             ) : (
-              <p className="text-sm text-gray-500">No posts found</p>
+              <p className="text-sm text-gray-500 px-4 my-4">No posts found</p>
             )}
           </div>
         </div>
