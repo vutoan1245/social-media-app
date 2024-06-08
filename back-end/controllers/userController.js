@@ -1,19 +1,20 @@
 import User from "../models/User.js";
 import Post from "../models/Post.js";
-import NodeCache from "node-cache";
+import redisClient from "../utils/redisClient.js";
 
-const cache = new NodeCache({ stdTTL: 100, checkperiod: 120 }); // Cache for 100 seconds
+const USER_CACHE_PREFIX = "user:";
+const CACHE_EXPIRATION = 3600; // Cache expiration time in seconds (e.g., 1 hour)
 
 /* GET USER INFO */
 export const getUserInfo = async (req, res) => {
   try {
     const userId = req.params.id;
+    const cachedUser = await redisClient.get(`${USER_CACHE_PREFIX}${userId}`);
 
-    // Check if the data is in the cache
-    const cachedUser = cache.get(userId);
     if (cachedUser) {
+      // If cached data exists, return it
       console.log("Data from cache");
-      return res.status(200).json(cachedUser);
+      return res.status(200).json(JSON.parse(cachedUser));
     }
 
     const user = await User.findById(userId).select("-password -email"); // Exclude the password and email from the result
@@ -23,7 +24,13 @@ export const getUserInfo = async (req, res) => {
     }
 
     // Store the data in the cache
-    cache.set(userId, user);
+
+    await redisClient.set(
+      `${USER_CACHE_PREFIX}${userId}`,
+      JSON.stringify(user),
+      "EX",
+      CACHE_EXPIRATION
+    );
 
     res.status(200).json(user);
   } catch (err) {
@@ -55,7 +62,14 @@ export const editUserInfo = async (req, res) => {
     }
 
     // Update the cache with the new data
-    cache.set(userId, updatedUser);
+    await redisClient.set(
+      `${USER_CACHE_PREFIX}${userId}`,
+      JSON.stringify(updatedUser),
+      "EX",
+      CACHE_EXPIRATION
+    );
+
+    console.log("Cache info updated");
 
     res.status(200).json(updatedUser);
   } catch (err) {
