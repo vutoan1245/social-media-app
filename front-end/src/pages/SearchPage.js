@@ -27,7 +27,6 @@ const SearchPage = () => {
       const fetchResults = async () => {
         try {
           const res = await search(query, token);
-          console.log(res);
           setResults(res);
         } catch (error) {
           console.error("Error searching:", error);

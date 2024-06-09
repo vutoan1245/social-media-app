@@ -13,7 +13,6 @@ export const getUserInfo = async (req, res) => {
 
     if (cachedUser) {
       // If cached data exists, return it
-      console.log("Data from cache");
       return res.status(200).json(JSON.parse(cachedUser));
     }
 
@@ -24,7 +23,6 @@ export const getUserInfo = async (req, res) => {
     }
 
     // Store the data in the cache
-
     await redisClient.set(
       `${USER_CACHE_PREFIX}${userId}`,
       JSON.stringify(user),
@@ -69,8 +67,6 @@ export const editUserInfo = async (req, res) => {
       CACHE_EXPIRATION
     );
 
-    console.log("Cache info updated");
-
     res.status(200).json(updatedUser);
   } catch (err) {
     console.error("Edit user info error:", err);
@@ -81,7 +77,6 @@ export const editUserInfo = async (req, res) => {
 /* Get USER POSTS */
 export const getUserPosts = async (req, res) => {
   try {
-    console.log("Getting user posts");
     const { userId } = req.params;
     const posts = await Post.find({ userId })
       .populate("userId", "firstName lastName picturePath")
