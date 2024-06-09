@@ -5,7 +5,7 @@ import {
   editUserInfo,
 } from "../controllers/userController.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
-import { uploadSingle } from "../middleware/fileUploadMiddleware.js";
+import { uploadSinglePicture } from "../middleware/fileUploadMiddleware.js";
 
 const router = express.Router();
 
@@ -28,6 +28,6 @@ router.get("/user/:id", verifyToken, getUserInfo);
  * @desc    Edit user information
  * @access  Private
  */
-router.put("/user/:id", verifyToken, uploadSingle, editUserInfo);
+router.put("/user/:id", verifyToken, uploadSinglePicture, editUserInfo);
 
 export default router;

@@ -5,7 +5,7 @@ import {
   likePost,
 } from "../controllers/postController.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
-import { uploadMultiple } from "../middleware/fileUploadMiddleware.js";
+import { uploadMultipleImageVideo } from "../middleware/fileUploadMiddleware.js";
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ const router = express.Router();
  * @desc    Create a new post
  * @access  Private
  */
-router.post("/posts", verifyToken, uploadMultiple, createPost);
+router.post("/posts", verifyToken, uploadMultipleImageVideo, createPost);
 
 /**
  * @route   GET /posts

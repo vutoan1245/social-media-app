@@ -6,7 +6,7 @@ import { createPost } from "../api/postsApi";
 
 const PostInput = () => {
   const [postContent, setPostContent] = useState("");
-  const [images, setImages] = useState([]);
+  const [mediaFiles, setMediaFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const fileInputRef = useRef(null);
@@ -14,9 +14,9 @@ const PostInput = () => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  const handleImageChange = (e) => {
+  const handleMediaChange = (e) => {
     const files = Array.from(e.target.files);
-    setImages(files);
+    setMediaFiles(files);
   };
 
   const handleSubmit = async (e) => {
@@ -26,8 +26,8 @@ const PostInput = () => {
 
     const formData = new FormData();
     formData.append("content", postContent);
-    images.forEach((image) => {
-      formData.append("pictures", image);
+    mediaFiles.forEach((file) => {
+      formData.append("medias", file);
     });
 
     try {
@@ -36,7 +36,7 @@ const PostInput = () => {
         addPostToBeginning({ post: { ...newPost, userId: { ...user } } })
       );
       setPostContent("");
-      setImages([]);
+      setMediaFiles([]);
       fileInputRef.current.value = null;
     } catch (error) {
       setError("Failed to create post. Please try again.");
@@ -77,7 +77,8 @@ const PostInput = () => {
             <input
               type="file"
               multiple
-              onChange={handleImageChange}
+              accept="image/*,video/*"
+              onChange={handleMediaChange}
               className="hidden"
               ref={fileInputRef}
               disabled={loading}
@@ -85,13 +86,22 @@ const PostInput = () => {
           </div>
         </div>
         <div className="flex flex-wrap mb-4">
-          {images.map((image, index) => (
-            <img
-              key={index}
-              src={URL.createObjectURL(image)}
-              alt="Selected"
-              className="w-36 h-36 object-cover m-1 rounded"
-            />
+          {mediaFiles.map((file, index) => (
+            <div key={index} className="relative m-1">
+              {file.type.startsWith("image/") ? (
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt="Selected"
+                  className="w-36 h-36 object-cover rounded"
+                />
+              ) : (
+                <video
+                  src={URL.createObjectURL(file)}
+                  className="w-36 h-36 object-cover rounded"
+                  controls
+                />
+              )}
+            </div>
           ))}
         </div>
         <button

@@ -12,17 +12,8 @@ const storage = multer.diskStorage({
   },
 });
 
-// Initialize upload
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 10000000 }, // Limit file size to 10MB
-  fileFilter: (_req, file, cb) => {
-    checkFileType(file, cb);
-  },
-}).single("picture");
-
-// Check file type
-function checkFileType(file, cb) {
+// Check file type for single file upload (images only)
+function checkImageFileType(file, cb) {
   // Allowed ext
   const filetypes = /jpeg|jpg|png|gif/;
   // Check ext
@@ -37,27 +28,34 @@ function checkFileType(file, cb) {
   }
 }
 
-// Middleware function
-const uploadSingle = (req, res, next) => {
-  upload(req, res, (err) => {
-    if (err) {
-      return res.status(400).json({ success: false, message: err });
-    }
-    next();
-  });
-};
+// Check file type for multiple file upload (images and videos)
+function checkImageVideoFileType(file, cb) {
+  // Allowed ext
+  const filetypes = /jpeg|jpg|png|gif|mp4|mov|avi|mkv/;
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype);
 
-const uploadMany = multer({
+  if (mimetype && extname) {
+    return cb(null, true);
+  } else {
+    cb("Error: Images and Videos Only!");
+  }
+}
+
+// Initialize upload for single image upload
+const uploadSingle = multer({
   storage: storage,
   limits: { fileSize: 10000000 }, // Limit file size to 10MB
   fileFilter: (_req, file, cb) => {
-    checkFileType(file, cb);
+    checkImageFileType(file, cb);
   },
-}).array("pictures", 10); // Adjust the field name and the max number of files
+}).single("picture");
 
-// // Middleware function
-const uploadMultiple = (req, res, next) => {
-  uploadMany(req, res, (err) => {
+// Middleware function for single image upload
+const uploadSinglePicture = (req, res, next) => {
+  uploadSingle(req, res, (err) => {
     if (err) {
       return res.status(400).json({ success: false, message: err });
     }
@@ -65,4 +63,23 @@ const uploadMultiple = (req, res, next) => {
   });
 };
 
-export { uploadSingle, uploadMultiple };
+// Initialize upload for multiple image and video upload
+const uploadMultiple = multer({
+  storage: storage,
+  limits: { fileSize: 10000000 }, // Limit file size to 10MB
+  fileFilter: (_req, file, cb) => {
+    checkImageVideoFileType(file, cb);
+  },
+}).array("medias", 10);
+
+// Middleware function for multiple image and video upload
+const uploadMultipleImageVideo = (req, res, next) => {
+  uploadMultiple(req, res, (err) => {
+    if (err) {
+      return res.status(400).json({ success: false, message: err });
+    }
+    next();
+  });
+};
+
+export { uploadSinglePicture, uploadMultipleImageVideo };

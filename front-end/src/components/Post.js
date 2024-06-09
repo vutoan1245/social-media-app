@@ -56,6 +56,32 @@ const Post = ({ post }) => {
     }
   };
 
+  const renderMedia = (file) => {
+    const fileExtension = file.split(".").pop().toLowerCase();
+    const videoExtensions = ["mp4", "mov", "avi", "mkv"];
+    const isVideo = videoExtensions.includes(fileExtension);
+
+    if (isVideo) {
+      return (
+        <video
+          key={file}
+          controls
+          src={`${process.env.REACT_APP_API_BASE_URL}/assets/${file}`}
+          className="w-36 h-36 object-cover m-1 rounded"
+        />
+      );
+    }
+
+    return (
+      <img
+        key={file}
+        src={`${process.env.REACT_APP_API_BASE_URL}/assets/${file}`}
+        alt={`Post media`}
+        className="w-36 h-36 object-cover m-1 rounded"
+      />
+    );
+  };
+
   return (
     <div className="mb-6 p-4 bg-white rounded-lg shadow-md">
       <div className="flex items-center mb-4">
@@ -83,14 +109,7 @@ const Post = ({ post }) => {
       </div>
       <p className="mb-4">{post.content}</p>
       <div className="flex flex-wrap mb-4">
-        {post.images.map((image, index) => (
-          <img
-            key={index}
-            src={`${process.env.REACT_APP_API_BASE_URL}/assets/${image}`}
-            alt={`Post ${index + 1}`}
-            className="w-36 h-36 object-cover m-1 rounded"
-          />
-        ))}
+        {post.images.map((file) => renderMedia(file))}
       </div>
       <div className="flex justify-around text-center text-gray-700">
         <div

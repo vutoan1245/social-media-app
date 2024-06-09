@@ -1,6 +1,6 @@
 import express from "express";
 import { login, register } from "../controllers/authController.js";
-import { uploadSingle } from "../middleware/fileUploadMiddleware.js";
+import { uploadSinglePicture } from "../middleware/fileUploadMiddleware.js";
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ const router = express.Router();
  * @desc    Register a new user
  * @access  Public
  */
-router.post("/auth/register", uploadSingle, register);
+router.post("/auth/register", uploadSinglePicture, register);
 
 /**
  * @route   POST /auth/login
