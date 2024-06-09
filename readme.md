@@ -12,6 +12,7 @@ This is a simple social media application built with React and Redux for the fro
 - User Profiles: View user profiles with profile pictures, bios, and other details.
 - Posts: Create, like, comment on, and view posts.
 - Responsive Design: Tailwind CSS ensures the app is responsive and mobile-friendly.
+- Redis Caching: Improved performance with Redis caching for frequently accessed data.
 
 ## Tech Stack
 
@@ -30,6 +31,7 @@ This is a simple social media application built with React and Redux for the fro
 - Mongoose: ODM for MongoDB and Node.js.
 - Multer: Middleware for handling file uploads.
 - JWT: JSON Web Tokens for authentication.
+- Redis: In-memory data structure store for caching.
 
 ## Getting Started
 
@@ -37,6 +39,7 @@ This is a simple social media application built with React and Redux for the fro
 
 - Node.js and npm installed on your local machine.
 - MongoDB server running locally or a MongoDB Atlas account.
+- Docker installed on your local machine (for Redis).
 
 ### Installation
 
@@ -67,25 +70,38 @@ npm install
 MONGO_URL=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 PORT=3001
+REDIS_HOST="localhost"
+REDIS_PORT=6379
+REDIS_PASSWORD=pass
+```
+
+2. Create a `.env` file in the `front-end` directory and add the following environment variables:
+
+```plaintext
+REACT_APP_API_BASE_URL=http://localhost:3001
 ```
 
 ### Running the Application
 
-1. Start the backend server:
+1. Start the Redis server using Docker:
+
+```bash
+docker-compose up -d
+```
+
+2. Start the backend server:
 
 ```bash
 cd back-end
 npm start
 ```
 
-2. Start the frontend development server:
+3. Start the frontend development server:
 
 ```bash
 cd ../front-end
 npm start
 ```
-
-3. Open your browser and navigate to `http://localhost:3000`.
 
 ## Project Structure
 
@@ -125,6 +141,7 @@ npm start
 - `controllers/postController.js`: Controller for post-related logic.
 - `models/User.js`: Mongoose model for user data.
 - `models/Post.js`: Mongoose model for post data.
+- `redisClient.js`: Redis client configuration file.
 
 ## License
 
