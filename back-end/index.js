@@ -8,9 +8,6 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
-import authRoutes from "./routes/authRoutes.js";
-import postRoutes from "./routes/postRoutes.js";
-import userRoutes from "./routes/userRoutes.js"; // Import the user routes
 import mainRouter from "./routes/index.js";
 
 // Setup
@@ -37,7 +34,17 @@ app.use(morgan("common"));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
-app.use("/assets", express.static(path.join(__dirname, "public/assets")));
+app.use(
+  "/assets",
+  // static file browser cache settings
+  express.static(path.join(__dirname, "public/assets"), {
+    maxAge: "30d", // 30 days in milliseconds
+    setHeaders: (res, path) => {
+      res.set("Cache-Control", "public, max-age=2592000"); // 30 days in seconds
+      res.set("Expires", new Date(Date.now() + 2592000000).toUTCString()); // 30 days in milliseconds
+    },
+  })
+);
 
 // Routes
 app.use("/api", mainRouter);
