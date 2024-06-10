@@ -1,32 +1,46 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SpinnerIcon } from "assets/icons";
 import TextField from "./common/TextField";
 import FileField from "./common/FileField";
 import { registerUser } from "api/authApi";
+import useForm from "../hooks/useForm";
 
 const SignUp = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [profileImage, setProfileImage] = useState(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleRegister = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    setError("");
+  const initialValues = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    profileImage: null,
+  };
 
+  const validate = (values) => {
+    let errors = {};
+    if (!values.firstName) errors.firstName = "First name is required";
+    if (!values.lastName) errors.lastName = "Last name is required";
+    if (!values.email) errors.email = "Email is required";
+    if (!values.password) errors.password = "Password is required";
+    if (values.password !== values.confirmPassword) {
+      errors.confirmPassword = "Passwords do not match";
+    }
+    return errors;
+  };
+
+  const { values, errors, loading, setErrors, handleChange, handleSubmit } =
+    useForm(initialValues, validate);
+
+  const handleRegister = async () => {
     const formData = new FormData();
-    formData.append("firstName", firstName);
-    formData.append("lastName", lastName);
-    formData.append("email", email);
-    formData.append("password", password);
-    if (profileImage) {
-      formData.append("picture", profileImage);
+    formData.append("firstName", values.firstName);
+    formData.append("lastName", values.lastName);
+    formData.append("email", values.email);
+    formData.append("password", values.password);
+    if (values.profileImage) {
+      formData.append("picture", values.profileImage);
     }
 
     try {
@@ -35,10 +49,8 @@ const SignUp = () => {
         navigate("/sign-in");
       }
     } catch (error) {
-      setError("Registration failed. Please try again.");
+      setErrors({ message: "Register fail" });
       console.error("SignUp error:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -46,48 +58,67 @@ const SignUp = () => {
     <div className="max-w-md mx-auto mt-24 p-6 bg-white rounded-lg shadow-md">
       <h3 className="text-2xl font-bold mb-6">Sign Up</h3>
 
-      {error && (
+      {Object.keys(errors).length > 0 && (
         <div className="mb-4 text-red-600 bg-red-100 p-3 rounded-md">
-          {error}
+          {Object.values(errors).map((error, index) => (
+            <p key={index}>{error}</p>
+          ))}
         </div>
       )}
 
-      <form onSubmit={handleRegister}>
+      <form onSubmit={(e) => handleSubmit(e, handleRegister)}>
         <TextField
           label="First Name"
           type="text"
+          name="firstName"
           placeholder="First name"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
+          value={values.firstName}
+          onChange={handleChange}
         />
 
         <TextField
           label="Last Name"
           type="text"
+          name="lastName"
           placeholder="Last name"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
+          value={values.lastName}
+          onChange={handleChange}
         />
 
         <TextField
           label="Email Address"
           type="email"
+          name="email"
           placeholder="Enter email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={values.email}
+          onChange={handleChange}
         />
 
         <TextField
           label="Password"
           type="password"
+          name="password"
           placeholder="Enter password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={values.password}
+          onChange={handleChange}
+        />
+
+        <TextField
+          label="Confirm Password"
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm password"
+          value={values.confirmPassword}
+          onChange={handleChange}
         />
 
         <FileField
           label="Profile Image"
-          onChange={(e) => setProfileImage(e.target.files[0])}
+          onChange={(e) =>
+            handleChange({
+              target: { name: "profileImage", value: e.target.files[0] },
+            })
+          }
         />
 
         <div className="mb-4">

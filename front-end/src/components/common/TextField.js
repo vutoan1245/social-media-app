@@ -1,18 +1,29 @@
 import React from "react";
 
-const TextField = ({ id, label, type = "text", value, onChange, disabled }) => (
+const TextField = ({
+  label,
+  type,
+  name,
+  placeholder,
+  value,
+  onChange,
+  error,
+}) => (
   <div className="mb-4">
-    <label className="block text-gray-700" htmlFor={id}>
+    <label className="block text-gray-700 text-sm font-bold mb-2">
       {label}
     </label>
     <input
-      id={id}
       type={type}
+      name={name}
+      placeholder={placeholder}
       value={value}
       onChange={onChange}
-      disabled={disabled}
-      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+      className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+        error && "border-red-500"
+      }`}
     />
+    {error && <p className="text-red-500 text-xs italic mt-2">{error}</p>}
   </div>
 );
 

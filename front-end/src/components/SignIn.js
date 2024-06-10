@@ -1,26 +1,34 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../state/state";
 import { SpinnerIcon } from "../assets/icons";
 import TextField from "./common/TextField";
 import { loginUser } from "../api/authApi";
+import useForm from "../hooks/useForm";
 
 const SignIn = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    setError("");
+  const initialValues = {
+    email: "",
+    password: "",
+  };
 
+  const validate = (values) => {
+    let errors = {};
+    if (!values.email) errors.email = "Email is required";
+    if (!values.password) errors.password = "Password is required";
+    return errors;
+  };
+
+  const { values, errors, loading, setErrors, handleChange, handleSubmit } =
+    useForm(initialValues, validate);
+
+  const onSubmit = async () => {
     try {
-      const loggedInRes = await loginUser(email, password);
+      const loggedInRes = await loginUser(values.email, values.password);
       if (loggedInRes) {
         dispatch(
           setLogin({ user: loggedInRes.user, token: loggedInRes.token })
@@ -28,34 +36,38 @@ const SignIn = () => {
         navigate("/home");
       }
     } catch (error) {
-      setError("Invalid email or password");
-    } finally {
-      setLoading(false);
+      console.log(error);
+      setErrors({ message: "Wrong email or password" });
+      console.error("SignUp error:", error);
     }
   };
 
   return (
     <div className="max-w-md mx-auto mt-24 p-6 bg-white rounded-lg shadow-md">
       <h3 className="text-2xl font-bold mb-6 text-center">Sign In</h3>
-      {error && (
+      {errors.message && (
         <div className="mb-4 text-red-600 bg-red-100 p-3 rounded-md">
-          {error}
+          {errors.message}
         </div>
       )}
-      <form onSubmit={onSubmit}>
+      <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
         <TextField
           label="Email Address"
           type="email"
+          name="email"
           placeholder="Enter email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={values.email}
+          onChange={handleChange}
+          error={errors.email}
         />
         <TextField
           label="Password"
           type="password"
+          name="password"
           placeholder="Enter password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={values.password}
+          onChange={handleChange}
+          error={errors.password}
         />
         <div className="mb-4">
           <button
