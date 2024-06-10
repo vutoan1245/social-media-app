@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   redis:
-    image: 'redis:alpine'
+    image: 'redis:7.0.15-alpine3.20'
     container_name: my-redis
     ports:
       - '6379:6379'
@@ -12,12 +12,25 @@ services:
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     restart: always
     networks:
-      - redis-network
+      - app-network
+
+  mongodb:
+    image: 'mongo:5.0.27-focal'
+    container_name: my-mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb-data:/data/db
+    restart: always
+    networks:
+      - app-network
 
 volumes:
   redis-data:
     driver: local
+  mongodb-data:
+    driver: local
 
 networks:
-  redis-network:
+  app-network:
     driver: bridge
