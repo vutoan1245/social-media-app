@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { router } from "expo-router";
 import { loginUser } from "../utils/api";
-import { saveToken } from "../utils/storage";
+import { saveUserData } from "../utils/storage";
 
 const LoginScreen = () => {
   const colorScheme = useColorScheme();
@@ -23,10 +23,11 @@ const LoginScreen = () => {
     setError("");
     try {
       const response = await loginUser(email, password);
-      await saveToken("auth_token", response.data.token); // Store token in SecureStore
+      await saveUserData(response.data); // Store token in SecureStore
+
       router.push("/(tabs)/home");
     } catch (error) {
-      setError("Failed to login");
+      setError("Failed to login", error);
     } finally {
       setLoading(false);
     }
