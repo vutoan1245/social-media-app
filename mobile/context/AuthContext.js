@@ -1,17 +1,29 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { saveToken, getToken, deleteToken } from "../utils/tokenStorage";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const signIn = () => {
-    // Your sign-in logic here
+  useEffect(() => {
+    const loadToken = async () => {
+      const token = await getToken("auth_token");
+      if (token) {
+        setIsAuthenticated(true);
+      }
+    };
+
+    loadToken();
+  }, []);
+
+  const signIn = async (token) => {
+    await saveToken("auth_token", token);
     setIsAuthenticated(true);
   };
 
-  const signOut = () => {
-    // Your sign-out logic here
+  const signOut = async () => {
+    await deleteToken("auth_token");
     setIsAuthenticated(false);
   };
 
