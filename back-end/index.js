@@ -9,14 +9,13 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import mainRouter from "./routes/index.js";
+import { createIndex } from "./config/elasticClient.js";
 
 // Setup
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 6001;
-const MONGO_URL = process.env.MONGO_URL;
 
 // Ensure 'public/assets' directory exists
 const ensureDirectoryExists = (dir) => {
@@ -37,13 +36,7 @@ app.use(cors());
 app.use(
   "/assets",
   // static file browser cache settings
-  express.static(path.join(__dirname, "public/assets"), {
-    maxAge: "30d", // 30 days in milliseconds
-    setHeaders: (res, path) => {
-      res.set("Cache-Control", "public, max-age=2592000"); // 30 days in seconds
-      res.set("Expires", new Date(Date.now() + 2592000000).toUTCString()); // 30 days in milliseconds
-    },
-  })
+  express.static(path.join(__dirname, "public/assets"), {})
 );
 
 // Routes
@@ -57,10 +50,12 @@ app.use((err, req, res, next) => {
 
 // Connect to MongoDB and Start Server
 mongoose
-  .connect(MONGO_URL, {})
+  .connect(process.env.MONGO_URL, {})
   .then(() => {
     console.log("Connected to MongoDB");
-    app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
+    app.listen(process.env.PORT || 3001, () =>
+      console.log(`Server running on port: ${process.env.PORT || 3001}`)
+    );
   })
   .catch((error) => {
     console.error("MongoDB connection error:", error);

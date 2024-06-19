@@ -1,22 +1,11 @@
-import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import LoginScreen from "./screen/LoginScreen";
-import RegisterScreen from "./screen/RegisterScreen";
-import HomeScreen from "./screen/HomeScreen";
+import { ExpoRoot } from "expo-router";
+import { AuthProvider } from "./context/AuthContext";
 
-const Stack = createStackNavigator();
-
-const App = () => {
+export default function App() {
+  const ctx = require.context("./app", true, /.js$/);
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <AuthProvider>
+      <ExpoRoot context={ctx} />
+    </AuthProvider>
   );
-};
-
-export default App;
+}
