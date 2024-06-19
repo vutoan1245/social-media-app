@@ -9,11 +9,11 @@ const api = axios.create({
 });
 
 export const loginUser = async (email, password) => {
-  return api.post("/auth/login", { email, password });
+  return api.post("/api/auth/login", { email, password });
 };
 
 export const registerUser = async (userData) => {
-  return api.post("/auth/register", userData, {
+  return api.post("/api/auth/register", userData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
