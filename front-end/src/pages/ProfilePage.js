@@ -5,6 +5,7 @@ import NavBar from "components/NavBar";
 import Feed from "components/Feed";
 import PostInput from "components/PostInput";
 import UserInfo from "components/UserInfo";
+import MainContainer from "components/common/MainContainer";
 import { SpinnerIcon } from "assets/icons";
 import { setPosts } from "state/state";
 import { fetchUserData, fetchUserPosts } from "api/userApi";
@@ -44,23 +45,21 @@ const ProfilePage = () => {
   return (
     <>
       <NavBar />
-      <div className="flex flex-col lg:flex-row mt-20">
-        <div className="w-full md:w-3/4 md:mx-auto lg:w-1/2 lg:mx-auto px-4">
-          {loading ? (
-            <div style={{ textAlign: "center", marginTop: "2rem" }}>
-              <SpinnerIcon className="text-black" animation="border" />
-            </div>
-          ) : (
-            <>
-              {userInfo && (
-                <UserInfo userInfo={userInfo} setUserInfo={setUserInfo} />
-              )}
-              {currUserId === userId && <PostInput />}
-              <Feed />
-            </>
-          )}
-        </div>
-      </div>
+      <MainContainer>
+        {loading ? (
+          <div style={{ textAlign: "center", marginTop: "2rem" }}>
+            <SpinnerIcon className="text-black" animation="border" />
+          </div>
+        ) : (
+          <>
+            {userInfo && (
+              <UserInfo userInfo={userInfo} setUserInfo={setUserInfo} />
+            )}
+            {currUserId === userId && <PostInput />}
+            <Feed />
+          </>
+        )}
+      </MainContainer>
     </>
   );
 };
