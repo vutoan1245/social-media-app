@@ -9,6 +9,7 @@ import {
   Ionicons,
 } from "@expo/vector-icons";
 import { router, usePathname } from "expo-router";
+import { deleteUserData } from "../../store/userSlice";
 
 const CustomDrawerContent = (props) => {
   const pathname = usePathname();
@@ -16,6 +17,11 @@ const CustomDrawerContent = (props) => {
   useEffect(() => {
     console.log(pathname);
   }, [pathname]);
+
+  const onLogout = async () => {
+    await deleteUserData();
+    router.replace("/sign-in");
+  };
 
   return (
     <DrawerContentScrollView {...props}>
@@ -85,23 +91,15 @@ const CustomDrawerContent = (props) => {
           router.push("/favourites");
         }}
       />
+
       <DrawerItem
         icon={({ color, size }) => (
-          <Ionicons
-            name="settings-outline"
-            size={size}
-            color={pathname == "/settings" ? "#fff" : "#000"}
-          />
+          <AntDesign name="logout" size={size} color="black" />
         )}
-        label={"Settings"}
-        labelStyle={[
-          styles.navItemLabel,
-          { color: pathname == "/settings" ? "#fff" : "#000" },
-        ]}
-        style={{ backgroundColor: pathname == "/settings" ? "#333" : "#fff" }}
-        onPress={() => {
-          router.push("/settings");
-        }}
+        label={"Logout"}
+        labelStyle={[styles.navItemLabel, { color: "#000" }]}
+        style={{ backgroundColor: "#fff" }}
+        onPress={onLogout}
       />
     </DrawerContentScrollView>
   );
@@ -109,9 +107,12 @@ const CustomDrawerContent = (props) => {
 
 export default function Layout() {
   return (
-    <Drawer drawerContent={(props) => <CustomDrawerContent {...props} />} screenOptions={{headerShown: false}}>
-      <Drawer.Screen name="favourites" options={{headerShown: true}} />
-      <Drawer.Screen name="settings" options={{headerShown: true}} />
+    <Drawer
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      screenOptions={{ headerShown: false }}
+    >
+      <Drawer.Screen name="favourites" options={{ headerShown: true }} />
+      <Drawer.Screen name="settings" options={{ headerShown: true }} />
     </Drawer>
   );
 }
@@ -138,11 +139,11 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   userEmail: {
-    fontSize:16,
-    fontStyle: 'italic',
-    textDecorationLine: 'underline',
-  }
+    fontSize: 16,
+    fontStyle: "italic",
+    textDecorationLine: "underline",
+  },
 });
