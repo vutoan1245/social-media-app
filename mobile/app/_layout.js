@@ -8,10 +8,7 @@ export default function _layout() {
     <Provider store={store}>
       <Stack
         screenOptions={{
-          headerStyle: {
-            backgroundColor: "red",
-          },
-          headerTintColor: "white",
+          headerShown: false,
         }}
       >
         <Stack.Screen
@@ -28,7 +25,6 @@ export default function _layout() {
             ),
           }}
         />
-        <Stack.Screen name="about" options={{ headerTitle: "About" }} />
         <Stack.Screen
           name="blog/index"
           options={{ headerTitle: "All Blog Posts" }}
