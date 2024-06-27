@@ -135,7 +135,7 @@ const RegisterScreen = () => {
           {loading ? "Loading..." : "Register"}
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+      <TouchableOpacity onPress={() => router.replace("/sign-in")}>
         <Text style={styles.link}>Back to Login</Text>
       </TouchableOpacity>
     </View>

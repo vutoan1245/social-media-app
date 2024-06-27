@@ -25,7 +25,7 @@ const LoginScreen = () => {
       const response = await loginUser(email, password);
       await saveUserData(response.data); // Store token in SecureStore
 
-      router.push("/(tabs)/home");
+      router.push("/(drawer)/(tabs)/feed");
     } catch (error) {
       setError("Failed to login", error);
     } finally {
