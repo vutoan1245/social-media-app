@@ -11,7 +11,7 @@ const Root = () => {
       const user = await getUserData();
 
       if (user) {
-        router.push("/(tabs)/home");
+        router.replace("(drawer)/(tabs)/feed");
       }
       return user;
     };
