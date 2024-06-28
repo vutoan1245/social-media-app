@@ -7,12 +7,14 @@ import {
   useColorScheme,
   StyleSheet,
 } from "react-native";
+import { useDispatch } from "react-redux";
 import { router } from "expo-router";
 import { loginUser } from "../utils/api";
-import { saveUserData } from "../utils/storage";
+import { saveUserData } from "../store/userSlice";
 
 const LoginScreen = () => {
   const colorScheme = useColorScheme();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -23,8 +25,7 @@ const LoginScreen = () => {
     setError("");
     try {
       const response = await loginUser(email, password);
-      await saveUserData(response.data); // Store token in SecureStore
-
+      dispatch(saveUserData(response.data));
       router.push("/(drawer)/(tabs)/feed");
     } catch (error) {
       setError("Failed to login", error);

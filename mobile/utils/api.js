@@ -20,4 +20,14 @@ export const registerUser = async (userData) => {
   });
 };
 
+export const fetchPosts = async (token) => {
+  const response = await axios.get(API_BASE_URL + "/api/posts", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
+
 export default api;
