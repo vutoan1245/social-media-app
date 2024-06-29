@@ -16,6 +16,7 @@
     "@react-navigation/stack": "^6.3.29",
     "@reduxjs/toolkit": "^2.2.5",
     "axios": "^1.7.2",
+    "date-fns": "^3.6.0",
     "expo": "~51.0.9",
     "expo-router": "~3.5.16",
     "expo-secure-store": "^13.0.1",

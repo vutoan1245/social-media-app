@@ -3,6 +3,7 @@ import { View, Text, Button } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserData } from "../../../../store/userSlice";
 import { fetchPosts } from "../../../../utils/api";
+import PostList from "../../../../components/PostLIst";
 
 export default function Page() {
   const [posts, setPosts] = useState([]);
@@ -28,13 +29,7 @@ export default function Page() {
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text style={{ fontSize: 18 }}>Feed Page</Text>
       <View>
-        {posts.map((post) => {
-          return (
-            <View key={post.id}>
-              <Text>{post.content}</Text>
-            </View>
-          );
-        })}
+        <PostList posts={posts} />
       </View>
 
       <Button title="Refresh" onPress={() => dispatch(fetchUserData())} />
