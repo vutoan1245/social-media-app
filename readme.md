@@ -4,7 +4,16 @@
 
 This is a simple social media application built with React and Redux for the frontend and Node.js with Express and MongoDB for the backend. The application allows users to register, login, create posts, like posts, comment on posts, and view user profiles. Tailwind CSS is used for styling, ensuring a responsive and modern design.
 
+Web App Examples:
 ![App Screenshot](./AppHomePage.png)
+
+Mobile App Example:
+
+<div style="display: flex; justify-content: space-between; text-align: center;">
+    <img src="./mobile_1.png" alt="App Screenshot" width="200"/>
+    <img src="./mobile_2.png" alt="App Screenshot" width="200"/>
+    <img src="./mobile_3.png" alt="App Screenshot" width="200"/>
+</div>
 
 ## Features
 
