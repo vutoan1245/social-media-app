@@ -8,10 +8,14 @@ import {
   MaterialIcons,
   Ionicons,
 } from "@expo/vector-icons";
+import { API_BASE_URL } from "@env";
 import { router, usePathname } from "expo-router";
+import { useSelector } from "react-redux";
 import { deleteUserData } from "../../store/userSlice";
 
 const CustomDrawerContent = (props) => {
+  const user = useSelector(state => state.user.data.user)
+  
   const pathname = usePathname();
 
   useEffect(() => {
@@ -27,14 +31,14 @@ const CustomDrawerContent = (props) => {
     <DrawerContentScrollView {...props}>
       <View style={styles.userInfoWrapper}>
         <Image
-          source={{ uri: "https://randomuser.me/api/portraits/women/26.jpg" }}
+          source={{ uri: `${API_BASE_URL}/assets/${user.picturePath}`}}
           width={80}
           height={80}
           style={styles.userImg}
         />
         <View style={styles.userDetailsWrapper}>
-          <Text style={styles.userName}>John Doe</Text>
-          <Text style={styles.userEmail}>john@email.com</Text>
+          <Text style={styles.userName}>{user.firstName + " " + user.lastName}</Text>
+          <Text style={styles.userEmail}>{user.email}</Text>
         </View>
       </View>
       <DrawerItem
