@@ -1,5 +1,5 @@
 import Post from "../models/Post.js";
-import { indexPost } from "../config/elasticClient.js";
+// import { indexPost } from "../config/elasticClient.js";
 
 // Create new post
 export const createPost = async (req, res) => {
@@ -19,12 +19,12 @@ export const createPost = async (req, res) => {
     const savedPost = await newPost.save();
 
     // Index the post in Elasticsearch
-    await indexPost({
-      userId: savedPost.userId.toString(),
-      content: savedPost.content,
-      images: savedPost.images,
-      createdAt: savedPost.createdAt,
-    });
+    // await indexPost({
+    //   userId: savedPost.userId.toString(),
+    //   content: savedPost.content,
+    //   images: savedPost.images,
+    //   createdAt: savedPost.createdAt,
+    // });
 
     res.status(201).json(savedPost);
   } catch (err) {

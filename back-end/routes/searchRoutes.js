@@ -2,7 +2,7 @@ import express from "express";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
-import { searchQuery } from "../config/elasticClient.js";
+// import { searchQuery } from "../config/elasticClient.js";
 
 const router = express.Router();
 
@@ -20,7 +20,7 @@ router.get("/search", verifyToken, async (req, res) => {
       content: { $regex: query, $options: "i" },
     }).populate("userId", "firstName lastName picturePath");
 
-    const elasticSearchRes = await searchQuery(query);
+    // const elasticSearchRes = await searchQuery(query);
 
     // Search for users that match the query
     const users = await User.find({
@@ -30,7 +30,7 @@ router.get("/search", verifyToken, async (req, res) => {
       ],
     }).select("-password -email");
 
-    res.status(200).json({ posts, users, elasticSearchRes });
+    res.status(200).json({ posts, users });
   } catch (error) {
     console.error("Error searching:", error);
     res.status(500).json({ error: error.message });

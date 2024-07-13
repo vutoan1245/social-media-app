@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import Post from "../models/Post.js";
 import redisClient from "../utils/redisClient.js";
-import { indexUser } from "../config/elasticClient.js";
+// import { indexUser } from "../config/elasticClient.js";
 
 const USER_CACHE_PREFIX = "user:";
 const CACHE_EXPIRATION = 3600; // Cache expiration time in seconds (e.g., 1 hour)
@@ -24,12 +24,12 @@ export const getUserInfo = async (req, res) => {
     }
 
     // Index user in Elasticsearch
-    await indexUser({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      bio: user.bio,
-      picturePath: user.picturePath,
-    });
+    // await indexUser({
+    //   firstName: user.firstName,
+    //   lastName: user.lastName,
+    //   bio: user.bio,
+    //   picturePath: user.picturePath,
+    // });
 
     // Store the data in the cache
     await redisClient.set(
@@ -69,12 +69,12 @@ export const editUserInfo = async (req, res) => {
     }
 
     // Index updated user in Elasticsearch
-    await indexUser({
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName,
-      bio: updatedUser.bio,
-      picturePath: updatedUser.picturePath,
-    });
+    // await indexUser({
+    //   firstName: updatedUser.firstName,
+    //   lastName: updatedUser.lastName,
+    //   bio: updatedUser.bio,
+    //   picturePath: updatedUser.picturePath,
+    // });
 
     // Update the cache with the new data
     await redisClient.set(
