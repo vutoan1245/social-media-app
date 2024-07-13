@@ -9,7 +9,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import mainRouter from "./routes/index.js";
-import { createIndex } from "./config/elasticClient.js";
 
 // Setup
 const __filename = fileURLToPath(import.meta.url);
