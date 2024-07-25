@@ -5,6 +5,7 @@ import {
   editUserInfo,
   followUser,
   unfollowUser,
+  getUserFollowers,
 } from "../controllers/userController.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
 import { uploadSinglePicture } from "../middleware/fileUploadMiddleware.js";
@@ -45,5 +46,12 @@ router.post("/user/:id/follow", verifyToken, followUser);
  * @access  Private
  */
 router.post("/user/:id/unfollow", verifyToken, unfollowUser);
+
+/**
+ * @route   GET /user/:id/followers
+ * @desc    Get followers of a user
+ * @access  Private
+ */
+router.get("/user/:id/followers", verifyToken, getUserFollowers);
 
 export default router;

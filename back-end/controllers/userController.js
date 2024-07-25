@@ -168,3 +168,20 @@ export const unfollowUser = async (req, res) => {
     res.status(500).json({ error: "Server error. Please try again later." });
   }
 };
+
+/* GET USER FOLLOWERS */
+export const getUserFollowers = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId).populate("followers", "firstName lastName picturePath");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user.followers);
+  } catch (err) {
+    console.error("Get user followers error:", err);
+    res.status(500).json({ error: "Server error. Please try again later." });
+  }
+};
