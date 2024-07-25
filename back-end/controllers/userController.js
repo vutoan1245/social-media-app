@@ -104,3 +104,67 @@ export const getUserPosts = async (req, res) => {
     res.status(404).json({ message: err.message });
   }
 };
+
+/* FOLLOW USER */
+export const followUser = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const followId = req.params.id;
+
+    if (userId === followId) {
+      return res.status(400).json({ message: "You cannot follow yourself" });
+    }
+
+    const user = await User.findById(userId);
+    const followUser = await User.findById(followId);
+
+    if (!user || !followUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.following.includes(followId)) {
+      return res.status(400).json({ message: "You are already following this user" });
+    }
+
+    user.following.push(followId);
+    followUser.followers.push(userId);
+
+    await user.save();
+    await followUser.save();
+
+    res.status(200).json({ message: "Followed successfully" });
+  } catch (err) {
+    console.error("Follow user error:", err);
+    res.status(500).json({ error: "Server error. Please try again later." });
+  }
+};
+
+/* UNFOLLOW USER */
+export const unfollowUser = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const followId = req.params.id;
+
+    const user = await User.findById(userId);
+    const followUser = await User.findById(followId);
+
+    if (!user || !followUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!user.following.includes(followId)) {
+      return res.status(400).json({ message: "You are not following this user" });
+    }
+
+    user.following = user.following.filter(id => id.toString() !== followId);
+    followUser.followers = followUser.followers.filter(id => id.toString() !== userId);
+
+    await user.save();
+    await followUser.save();
+
+    res.status(200).json({ message: "Unfollowed successfully" });
+  } catch (err) {
+    console.error("Unfollow user error:", err);
+    res.status(500).json({ error: "Server error. Please try again later." });
+  }
+};
