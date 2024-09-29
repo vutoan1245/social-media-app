@@ -41,6 +41,11 @@ app.use(
 // Routes
 app.use("/api", mainRouter);
 
+// Test API endpoint
+app.get('/test', (req, res) => {
+  res.status(200).json({ message: 'Test API is working!' });
+});
+
 // Error Handling Middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
