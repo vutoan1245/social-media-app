@@ -38,6 +38,10 @@ app.use(
   express.static(path.join(__dirname, "public/assets"), {})
 );
 
+app.get('/', () => {
+  res.status(200).json({ message: 'Working!!!!' });
+});
+
 // Routes
 app.use("/api", mainRouter);
 
@@ -54,8 +58,8 @@ app.use((err, req, res, next) => {
 
 // Connect to MongoDB and Start Server
 mongoose
-  .connect(process.env.MONGO_URL, {})
-  .then(() => {
+.connect(process.env.MONGO_URL, {})
+.then(() => {
     console.log("Connected to MongoDB");
     app.listen(process.env.PORT || 3001, () =>
       console.log(`Server running on port: ${process.env.PORT || 3001}`)
