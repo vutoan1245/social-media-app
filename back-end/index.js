@@ -38,7 +38,7 @@ app.use(
   express.static(path.join(__dirname, "public/assets"), {})
 );
 
-app.get('/', () => {
+app.get('/', (req, res) => {
   res.status(200).json({ message: 'Working!!!!' });
 });
 
