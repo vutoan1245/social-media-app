@@ -14,6 +14,10 @@ Parameters:
     Type: AWS::EC2::KeyPair::KeyName
     Description: Name of an existing EC2 KeyPair to enable SSH access.
 
+  CertificateArn:
+    Type: String
+    Description: ARN of the ACM certificate to use for HTTPS.
+
 Resources:
   ### VPC and Networking Resources ###
 
@@ -121,6 +125,10 @@ Resources:
           FromPort: 80
           ToPort: 80
           CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
           Value: ALBSecurityGroup
@@ -130,7 +138,6 @@ Resources:
   NodeJSLaunchTemplate:
     Type: AWS::EC2::LaunchTemplate
     Properties:
-      LaunchTemplateName: NodeJSLaunchTemplate
       LaunchTemplateData:
         ImageId: ami-0327453371a851ce4 # Updated AMI ID
         InstanceType: !Ref InstanceType
@@ -138,18 +145,18 @@ Resources:
         SecurityGroupIds:
           - !Ref SecurityGroupForEC2
         UserData:
-          Fn::Base64: !Sub
-            - |
-              #!/bin/bash
-              # Update packages
+          Fn::Base64: !Sub |
+            Fn::Base64: !Sub
+             - |
+               #!/bin/bash
+               # Update packages
 
-              cd /home/ec2-user/social-media-app/backend
-              node index.js
+               cd ~ec2-user/social-media-app/backend
+               pm2 start index.js
 
   NodeJSAutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
-      AutoScalingGroupName: NodeJSASG
       VPCZoneIdentifier:
         - !Ref Subnet1
         - !Ref Subnet2
@@ -157,7 +164,7 @@ Resources:
         LaunchTemplateId: !Ref NodeJSLaunchTemplate
         Version: !GetAtt NodeJSLaunchTemplate.LatestVersionNumber
       MinSize: "1"
-      MaxSize: "1"
+      MaxSize: "3"
       DesiredCapacity: "1"
       TargetGroupARNs:
         - !Ref ApplicationTargetGroup
@@ -167,7 +174,6 @@ Resources:
   ApplicationLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
-      Name: NodeJSLoadBalancer
       Subnets:
         - !Ref Subnet1
         - !Ref Subnet2
@@ -180,7 +186,6 @@ Resources:
   ApplicationTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      Name: NodeJSTargetGroup
       Port: 3001
       Protocol: HTTP
       VpcId: !Ref VPC
@@ -189,15 +194,30 @@ Resources:
       HealthCheckPath: /
       TargetType: instance
 
-  ApplicationListener:
+  ApplicationListenerHTTPS:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref ApplicationLoadBalancer
+      Port: 443
+      Protocol: HTTPS
+      Certificates:
+        - CertificateArn: !Ref CertificateArn
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref ApplicationTargetGroup
+
+  ApplicationListenerHTTP:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       LoadBalancerArn: !Ref ApplicationLoadBalancer
       Port: 80
       Protocol: HTTP
       DefaultActions:
-        - Type: forward
-          TargetGroupArn: !Ref ApplicationTargetGroup
+        - Type: redirect
+          RedirectConfig:
+            Protocol: HTTPS
+            Port: "443"
+            StatusCode: HTTP_301
 
 Outputs:
   LoadBalancerDNSName:
