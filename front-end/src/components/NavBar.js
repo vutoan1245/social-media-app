@@ -51,7 +51,7 @@ const NavBar = () => {
           >
             SocialApp
           </p>
-          <SearchForm />
+        {isAuth &&  <SearchForm />}
         </div>
         <div className="flex items-center space-x-4">
           {isAuth && (
