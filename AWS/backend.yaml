@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "AWS CloudFormation template to provision a new VPC with Auto Scaling EC2 instances and a Load Balancer running a Node.js application on port 3001."
+Description: "AWS CloudFormation template to provision a new VPC with Auto Scaling EC2 instances, a Load Balancer, and EFS for shared storage."
 
 Parameters:
   InstanceType:
@@ -59,8 +59,6 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref InternetGateway
 
-  # Subnets in Different Availability Zones
-
   Subnet1:
     Type: AWS::EC2::Subnet
     Properties:
@@ -95,6 +93,30 @@ Resources:
       SubnetId: !Ref Subnet2
       RouteTableId: !Ref PublicRouteTable
 
+  ### EFS Resources ###
+
+  EFSFileSystem:
+    Type: AWS::EFS::FileSystem
+    Properties:
+      Encrypted: true
+      PerformanceMode: generalPurpose
+
+  MountTarget1:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref EFSFileSystem
+      SubnetId: !Ref Subnet1
+      SecurityGroups:
+        - !Ref SecurityGroupForEFS
+
+  MountTarget2:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref EFSFileSystem
+      SubnetId: !Ref Subnet2
+      SecurityGroups:
+        - !Ref SecurityGroupForEFS
+
   ### Security Groups ###
 
   SecurityGroupForEC2:
@@ -111,6 +133,10 @@ Resources:
           FromPort: 3001
           ToPort: 3001
           SourceSecurityGroupId: !Ref SecurityGroupForALB
+        - IpProtocol: tcp
+          FromPort: 2049
+          ToPort: 2049
+          CidrIp: 0.0.0.0/0 # Allow NFS traffic for EFS
       Tags:
         - Key: Name
           Value: EC2SecurityGroup
@@ -133,6 +159,20 @@ Resources:
         - Key: Name
           Value: ALBSecurityGroup
 
+  SecurityGroupForEFS:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for EFS
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 2049
+          ToPort: 2049
+          CidrIp: 0.0.0.0/0 # NFS traffic
+      Tags:
+        - Key: Name
+          Value: EFSSecurityGroup
+
   ### EC2 Launch Template and Auto Scaling Group ###
 
   NodeJSLaunchTemplate:
@@ -147,9 +187,17 @@ Resources:
         UserData:
           Fn::Base64: !Sub |
             #!/bin/bash
-            # Update packages
+            # Install necessary tools
+            yum install -y amazon-efs-utils
 
-            cd home/ec2-user/social-media-app/back-end/
+            # Create a directory for EFS mount point
+            mkdir -p /mnt/efs
+
+            # Mount the EFS file system
+            mount -t efs -o tls ${EFSFileSystem}:/ /mnt/efs
+
+            # Navigate to app directory
+            cd /home/ec2-user/social-media-app/back-end/
             pm2 start index.js
             pm2 startup systemd
             pm2 save
