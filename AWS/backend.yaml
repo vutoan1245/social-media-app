@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "AWS CloudFormation template to provision a new VPC with Auto Scaling EC2 instances, a Load Balancer, and EFS for shared storage."
+Description: "AWS CloudFormation template to provision a new VPC with Auto Scaling EC2 instances, a Load Balancer, EFS for shared storage, and Amazon DocumentDB."
 
 Parameters:
   InstanceType:
@@ -137,6 +137,10 @@ Resources:
           FromPort: 2049
           ToPort: 2049
           CidrIp: 0.0.0.0/0 # Allow NFS traffic for EFS
+        - IpProtocol: tcp
+          FromPort: 27017
+          ToPort: 27017
+          SourceSecurityGroupId: !Ref SecurityGroupForDocumentDB # Allow EC2 to access DocumentDB
       Tags:
         - Key: Name
           Value: EC2SecurityGroup
@@ -173,6 +177,47 @@ Resources:
         - Key: Name
           Value: EFSSecurityGroup
 
+  SecurityGroupForDocumentDB:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow EC2 instances to connect to DocumentDB
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 27017
+          ToPort: 27017
+          SourceSecurityGroupId: !Ref SecurityGroupForEC2
+      Tags:
+        - Key: Name
+          Value: DocumentDBSecurityGroup
+
+  ### DocumentDB Cluster ###
+
+  DocumentDBCluster:
+    Type: AWS::DocDB::DBCluster
+    Properties:
+      MasterUsername: admin
+      MasterUserPassword: password1234
+      VpcSecurityGroupIds:
+        - !Ref SecurityGroupForDocumentDB
+      DBSubnetGroupName: !Ref DocumentDBSubnetGroup
+      StorageEncrypted: true
+
+  DocumentDBInstance:
+    Type: AWS::DocDB::DBInstance
+    Properties:
+      DBClusterIdentifier: !Ref DocumentDBCluster
+      DBInstanceClass: db.t3.medium # Cheapest option for DocumentDB
+      PubliclyAccessible: false
+
+  DocumentDBSubnetGroup:
+    Type: AWS::DocDB::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: "Subnet group for DocumentDB"
+      SubnetIds:
+        - !Ref Subnet1
+        - !Ref Subnet2
+
   ### EC2 Launch Template and Auto Scaling Group ###
 
   NodeJSLaunchTemplate:
@@ -196,8 +241,16 @@ Resources:
             # Mount the EFS file system
             mount -t efs -o tls ${EFSFileSystem}:/ /mnt/efs
 
+            # Install MongoDB tools to connect to DocumentDB
+            yum install -y mongodb-org-shell
+
             # Navigate to app directory
             cd /home/ec2-user/social-media-app/back-end/
+
+            # Update app config to use DocumentDB
+            sed -i 's/mongodb:\/\/localhost:27017/mongodb:\/\/admin:password1234@${DocumentDBCluster}.docdb.amazonaws.com:27017/g' config.js
+
+            # Start the Node.js application
             pm2 start index.js
             pm2 startup systemd
             pm2 save
