@@ -139,7 +139,7 @@ Resources:
     Type: AWS::EC2::LaunchTemplate
     Properties:
       LaunchTemplateData:
-        ImageId: ami-0862ab679509e2680 # Ensure this is the correct AMI ID
+        ImageId: ami-0862ab679509e2680
         InstanceType: !Ref InstanceType
         KeyName: !Ref KeyName
         SecurityGroupIds:
@@ -149,7 +149,7 @@ Resources:
             #!/bin/bash
             # Update packages
 
-            cd ec2-user/social-media-app/backend
+            cd home/ec2-user/social-media-app/back-end/
             pm2 start index.js
             pm2 startup systemd
             pm2 save
