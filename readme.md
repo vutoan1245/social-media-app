@@ -55,7 +55,7 @@ Mobile App Example:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/social-media-app.git
+git clone https://github.com/vutoan1245/social-media-app.git
 cd social-media-app
 ```
 
@@ -95,13 +95,13 @@ REACT_APP_API_BASE_URL=http://localhost:3001
 1. Start the Redis server using Docker:
 
 ```bash
+cd back-end
 docker-compose up -d
 ```
 
 2. Start the backend server:
 
 ```bash
-cd back-end
 npm start
 ```
 
@@ -111,46 +111,6 @@ npm start
 cd ../front-end
 npm start
 ```
-
-## Project Structure
-
-### Frontend (`front-end`)
-
-- `src/components`: React components for the application.
-- `src/pages`: Page components representing different routes.
-- `src/state`: Redux state management setup.
-- `src/assets`: Static assets like images and icons.
-
-### Backend (`back-end`)
-
-- `routes`: Express routes for authentication, user, and posts.
-- `controllers`: Controllers handling business logic for each route.
-- `models`: Mongoose models for MongoDB collections.
-- `middleware`: Custom middleware for authentication and file uploads.
-
-## Important Files
-
-### Frontend
-
-- `src/index.js`: Entry point for the React application.
-- `src/App.js`: Main application component.
-- `src/components/NavBar.js`: Navigation bar component.
-- `src/components/SideBar.js`: SideBar component.
-- `src/pages/HomePage.js`: Home page component.
-- `src/state/state.js`: Redux slice for state management.
-
-### Backend
-
-- `index.js`: Entry point for the Node.js server.
-- `routes/authRoutes.js`: Routes for user authentication.
-- `routes/userRoutes.js`: Routes for user profile management.
-- `routes/postRoutes.js`: Routes for creating, liking, and commenting on posts.
-- `controllers/authController.js`: Controller for authentication logic.
-- `controllers/userController.js`: Controller for user profile logic.
-- `controllers/postController.js`: Controller for post-related logic.
-- `models/User.js`: Mongoose model for user data.
-- `models/Post.js`: Mongoose model for post data.
-- `redisClient.js`: Redis client configuration file.
 
 ## License
 
